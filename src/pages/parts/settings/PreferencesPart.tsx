@@ -1,9 +1,11 @@
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 
+import { getProviders } from "@/backend/providers/providers";
 import { Toggle } from "@/components/buttons/Toggle";
 import { FlagIcon } from "@/components/FlagIcon";
 import { Dropdown } from "@/components/form/Dropdown";
+import { SortableList } from "@/components/form/SortableList";
 import { Heading1 } from "@/components/utils/Text";
 import { appLanguageOptions } from "@/setup/i18n";
 import { isAutoplayAllowed } from "@/utils/autoplay";
@@ -16,6 +18,8 @@ export function PreferencesPart(props: {
   setEnableThumbnails: (v: boolean) => void;
   enableAutoplay: boolean;
   setEnableAutoplay: (v: boolean) => void;
+  sourceOrder: string[];
+  setSourceOrder: (v: string[]) => void;
 }) {
   const { t } = useTranslation();
   const sorted = sortLangCodes(appLanguageOptions.map((item) => item.code));
@@ -93,6 +97,28 @@ export function PreferencesPart(props: {
             {t("settings.preferences.autoplayLabel")}
           </p>
         </div>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <p className="text-white font-bold">
+          {t("settings.preferences.sourceOrder")}
+        </p>
+        <p className="max-w-[25rem] font-medium">
+          {t("settings.preferences.sourceOrderDescription")}
+        </p>
+
+        <SortableList
+          items={props.sourceOrder.map((id) => ({
+            id,
+            name:
+              getProviders()
+                .listSources()
+                .find((s) => s.id === id)?.name || id,
+          }))}
+          setItems={(items) =>
+            props.setSourceOrder(items.map((item) => item.id))
+          }
+        />
       </div>
     </div>
   );
