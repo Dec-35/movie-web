@@ -40,6 +40,30 @@ export function Avatar(props: AvatarProps) {
   );
 }
 
+export function AccountAvatar(props: {
+  username?: string;
+  iconImage?: string;
+}) {
+  return props.iconImage ? (
+    <div className="flex-column avatar-container relative">
+      <img
+        className="rounded-full account-avatar w-[1.5rem] h-[1.5rem] ssm:w-[2rem] ssm:h-[2rem]"
+        src={props.iconImage}
+      />
+      <p>{props.username}</p>
+    </div>
+  ) : (
+    <div className="flex-column avatar-container relative">
+      <div className="relative inline-block">
+        <div className="account-avatar w-[1.5rem] h-[1.5rem] ssm:w-[2rem] ssm:h-[2rem] rounded-full overflow-hidden bg-type-dimmed flex items-center justify-center text-white">
+          <Icon icon={Icons.USER} className="text-base ssm:text-xl" />
+        </div>
+      </div>
+      <p>{props.username}</p>
+    </div>
+  );
+}
+
 export function UserAvatar(props: {
   sizeClass?: string;
   iconClass?: string;

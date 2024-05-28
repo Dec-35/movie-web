@@ -13,6 +13,7 @@ import { convertLegacyUrl, isLegacyUrl } from "@/backend/metadata/getmeta";
 import { generateQuickSearchMediaUrl } from "@/backend/metadata/tmdb";
 import { useOnlineListener } from "@/hooks/usePing";
 import { AboutPage } from "@/pages/About";
+import { AccountChoice } from "@/pages/AccountChoice";
 import { AdminPage } from "@/pages/admin/AdminPage";
 import VideoTesterView from "@/pages/developer/VideoTesterView";
 import { DmcaPage, shouldHaveDmcaPage } from "@/pages/Dmca";
@@ -118,6 +119,7 @@ function App() {
           }
         />
         <Route path="/browse/:query?" element={<HomePage />} />
+        <Route path="/accountChoice" element={<AccountChoice />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
