@@ -34,6 +34,36 @@
   border-color: rgb(var(--colors-secondary));
 }
 
+.avatar-wrapper.selected .account-avatar {
+  border-color: rgb(var(--colors-secondary));
+}
+
 .smaller-icon {
   transform: scale(0.5);
+}
+
+
+.avatar-wrapper:hover .close-button {
+  display: flex;
+}
+
+.close-button {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 50%;
+  background-color: white;
+  aspect-ratio: 1;
+  padding: 0.3rem;
+}
+
+.close-button::after {
+  content: 'x';
+  font-size: 1.5rem;
+  color: rgb(var(--colors-text));
+  height: fit-content;
+  line-height: 1rem;
+  font-size: 0.7rem;
+
 }

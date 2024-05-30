@@ -28,6 +28,8 @@ export function AccountChoice() {
     }[]
   >([]);
 
+  const [selectedUser, setSelectedUser] = useState<bigint | null>(null);
+
   // Function to load users and update state
   const loadUsers = async () => {
     try {
@@ -62,9 +64,39 @@ export function AccountChoice() {
     }
   }
 
+  function getCurrentUser() {
+    const account = localStorage.getItem("account");
+    if (account) {
+      setSelectedUser(BigInt(account));
+      console.log("Selected user:", account);
+    }
+  }
+
   useEffect(() => {
     loadUsers();
+    getCurrentUser();
   }, []);
+
+  async function deleteAccount(id: bigint | null) {
+    try {
+      fetch(`https://movie-web-accounts.vercel.app/users/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }).then(() => {
+        loadUsers();
+      });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  }
+
+  const selectUser = (id: bigint | null) => () => {
+    localStorage.setItem("account", id?.toString() ?? "");
+    setSelectedUser(id);
+  };
 
   return (
     <HomeLayout showBg={false}>
@@ -78,19 +110,32 @@ export function AccountChoice() {
               icon={Icons.DRAGON}
               onClick={() => {
                 loadUsers();
+                getCurrentUser();
               }}
             >
               {" "}
               Rafraichir{" "}
             </Button>
           </span>
-
           <div className="usersList flex-wrap flex gap-2 justify-center grow items-center">
             {users?.map((user) => (
-              <div key={user.user_id}>
+              <div
+                className={`user-${user.user_id} relative avatar-wrapper ${
+                  selectedUser === user.user_id ? "selected" : ""
+                }`}
+                key={user.user_id}
+                onClick={selectUser(user.user_id)}
+              >
                 <AccountAvatar
                   username={user.username ?? undefined}
                   iconImage={user.image ?? undefined}
+                />
+                <button
+                  onClick={async () => {
+                    await deleteAccount(user.user_id);
+                  }}
+                  type="button"
+                  className="absolute top-0 right-0 close-button"
                 />
               </div>
             ))}
