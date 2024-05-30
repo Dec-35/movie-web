@@ -98,6 +98,53 @@ export function AccountChoice() {
     setSelectedUser(id);
   };
 
+  function syncProfile() {
+    if (!selectedUser) return;
+
+    let progress = localStorage.getItem("__MW::progress");
+    if (progress) {
+      progress = JSON.parse(progress).state.items;
+    }
+
+    fetch(
+      `https://movie-web-accounts.vercel.app/users/${selectedUser}/progress`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({
+          progress,
+        }),
+      },
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          // Update local storage
+          const oldProgress = localStorage.getItem("__MW::progress");
+          if (oldProgress) {
+            const jsonProgress = JSON.parse(oldProgress);
+            if (jsonProgress) {
+              jsonProgress.state.items = data.progress;
+              localStorage.setItem(
+                "__MW::progress",
+                JSON.stringify(jsonProgress),
+              );
+            }
+          }
+
+          alert("Synchronisation terminée !");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
   return (
     <HomeLayout showBg={false}>
       <div className="mb-16 sm:mb-24" />
@@ -106,7 +153,7 @@ export function AccountChoice() {
           <span className="flex justify-between">
             <h3 className="text-type-emphasis">Utilisateurs</h3>
             <Button
-              padding="p-2"
+              padding="p-2 ml-auto"
               icon={Icons.DRAGON}
               onClick={() => {
                 loadUsers();
@@ -115,6 +162,16 @@ export function AccountChoice() {
             >
               {" "}
               Rafraichir{" "}
+            </Button>
+            <Button
+              padding="p-2 ml-2"
+              icon={Icons.UP_DOWN_ARROW}
+              onClick={() => {
+                syncProfile();
+              }}
+            >
+              {" "}
+              Synchroniser{" "}
             </Button>
           </span>
           <div className="usersList flex-wrap flex gap-2 justify-center grow items-center">
