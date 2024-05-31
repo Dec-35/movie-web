@@ -13,6 +13,7 @@ export function AccountChoice() {
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<bigint | null>(null);
   const [message, setMessage] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const loadUsers = async () => {
     const fetchedUsers = await accountManager.getUsers();
@@ -32,7 +33,7 @@ export function AccountChoice() {
           loadUsers();
         }
       } else {
-        setMessage("URL de l'image invalide");
+        setError("URL de l'image invalide");
       }
     }
   };
@@ -66,8 +67,10 @@ export function AccountChoice() {
   const syncProfile = async () => {
     const syncIcon = document.querySelector(".syncIcon");
     syncIcon?.classList.remove("paused");
-    accountManager.syncProfile(selectedUser).then(() => {
-      setMessage("Profil synchronisé");
+    accountManager.syncProfile(selectedUser).then((response) => {
+      console.log("Sync response", response);
+      if (response) setMessage("Profil synchronisé");
+      else setError("Vous allez trop vite, attendez un peu");
       syncIcon?.classList.add("paused");
     });
   };
@@ -78,6 +81,13 @@ export function AccountChoice() {
     }, 5000);
     return () => clearTimeout(timer);
   }, [message]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setError("");
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [error]);
 
   return (
     <HomeLayout showBg={false}>
@@ -105,7 +115,10 @@ export function AccountChoice() {
             <Icon icon={Icons.REFRESH} />
           </button>
         </SectionHeading>
-        <p className="text-sm text-lime userMessage">{message}</p>
+        <span className="flex justify-between mb-3">
+          <p className="text-sm text-lime userMessage">{message}</p>
+          <p className="text-sm text-lime userMessage red">{error}</p>
+        </span>
         <div className="my-auto accounts-container p-4">
           <div className="usersList flex-wrap flex justify-center grow items-center">
             {users?.map((user) => (

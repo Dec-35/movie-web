@@ -92,6 +92,10 @@
   color: rgb(69, 201, 69);
 }
 
+.userMessage.red {
+  color: rgb(201, 69, 69);
+}
+
 .userMessage:not(:empty) {
 
   animation: show 5s ease-in-out forwards;

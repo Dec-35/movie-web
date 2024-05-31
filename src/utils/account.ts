@@ -101,9 +101,9 @@ export const accountManager = {
     Backend takes care of the merge and returns the updated progress
     
     */
-    // Check if the last sync was less than 10 seconds ago
+    // Check if the last sync was less than 5 seconds ago
     const lastSync = getLastSync();
-    if (lastSync && Date.now() - lastSync.getTime() < 10000) {
+    if (lastSync && Date.now() - lastSync.getTime() < 5000) {
       return;
     }
     setLastSync();
@@ -135,11 +135,12 @@ export const accountManager = {
       );
       const data = await response.json();
       if (data.error) {
-        alert(data.error);
+        console.error("Error syncing profile:", data.error);
       } else {
         // Update local storage
         updateLocalStorageProgress(data);
         console.log("Synced profile successfully");
+        return data;
       }
     } catch (error) {
       console.error("Error:", error);
