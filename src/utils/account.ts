@@ -1,4 +1,5 @@
 // utils/account.ts
+import { useProgressStore } from "@/stores/progress";
 
 export interface User {
   username: string | null;
@@ -11,8 +12,12 @@ function updateLocalStorageProgress(value: any) {
   if (oldProgress) {
     const jsonProgress = JSON.parse(oldProgress);
     if (jsonProgress) {
-      jsonProgress.state.items = value.progress;
+      jsonProgress.state.items = value.progress ?? {};
       localStorage.setItem("__MW::progress", JSON.stringify(jsonProgress));
+
+      // Update the progress store with the new progress items
+      const replaceItems = useProgressStore.getState().replaceItems;
+      replaceItems(value.progress ?? {});
     }
   }
 }
@@ -82,6 +87,8 @@ export const accountManager = {
   },
 
   setCurrentUser(id: bigint | null) {
+    updateLocalStorageProgress({});
+
     localStorage.setItem("account", id?.toString() ?? "");
   },
 

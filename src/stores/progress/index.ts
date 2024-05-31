@@ -88,6 +88,7 @@ export const useProgressStore = create(
         accountManager.deleteProgress(id);
       },
       replaceItems(items: Record<string, ProgressMediaItem>) {
+        console.log("Replacing items", items);
         set((s) => {
           s.items = items;
         });
