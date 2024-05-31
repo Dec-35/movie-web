@@ -49,6 +49,7 @@ export function AccountChoice() {
 
   const deleteAccount = async (id: bigint | null) => {
     await accountManager.deleteUser(id);
+    console.log("User deleted", id, selectedUser);
     loadUsers();
     if (selectedUser === id) {
       setSelectedUser(null);
