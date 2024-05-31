@@ -5,145 +5,54 @@ import { Button } from "@/components/buttons/Button";
 import { Icon, Icons } from "@/components/Icon";
 import { WideContainer } from "@/components/layout/WideContainer";
 import { HomeLayout } from "@/pages/layouts/HomeLayout";
-
 import "@/assets/css/addAccounts.css";
-
-async function getUsers() {
-  try {
-    const response = await fetch("https://movie-web-accounts.vercel.app/users");
-    const data = await response.json();
-    return data.rows;
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    return [];
-  }
-}
+import { User, accountManager } from "@/utils/account";
 
 export function AccountChoice() {
-  const [users, setUsers] = useState<
-    {
-      username: string | null;
-      image: string | null;
-      user_id: bigint | null;
-    }[]
-  >([]);
-
+  const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<bigint | null>(null);
 
-  // Function to load users and update state
   const loadUsers = async () => {
-    try {
-      const fetchedUsers = await getUsers();
-      setUsers(fetchedUsers);
-    } catch (error) {
-      console.error("Error loading users:", error);
-    }
+    const fetchedUsers = await accountManager.getUsers();
+    setUsers(fetchedUsers);
   };
 
-  function addAccount() {
+  const addAccount = async () => {
     const username = prompt("Nom d'utilisateur:");
     const image = prompt("URL de l'image:");
 
     if (username && image) {
-      fetch("https://movie-web-accounts.vercel.app/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({ username, image }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data);
-          loadUsers();
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      const response = await accountManager.addUser(username, image);
+      if (response) {
+        console.log("Success:", response);
+        loadUsers();
+      }
     }
-  }
+  };
 
-  function getCurrentUser() {
-    const account = localStorage.getItem("account");
-    if (account) {
-      setSelectedUser(BigInt(account));
-      console.log("Selected user:", account);
-    }
-  }
+  const getCurrentUser = () => {
+    const userId = accountManager.getCurrentUser();
+    setSelectedUser(userId);
+  };
 
   useEffect(() => {
     loadUsers();
     getCurrentUser();
   }, []);
 
-  async function deleteAccount(id: bigint | null) {
-    try {
-      fetch(`https://movie-web-accounts.vercel.app/users/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      }).then(() => {
-        loadUsers();
-      });
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  }
+  const deleteAccount = async (id: bigint | null) => {
+    await accountManager.deleteUser(id);
+    loadUsers();
+  };
 
   const selectUser = (id: bigint | null) => () => {
-    localStorage.setItem("account", id?.toString() ?? "");
+    accountManager.setCurrentUser(id);
     setSelectedUser(id);
   };
 
-  function syncProfile() {
-    if (!selectedUser) return;
-
-    let progress = localStorage.getItem("__MW::progress");
-    if (progress) {
-      progress = JSON.parse(progress).state.items;
-    }
-
-    fetch(
-      `https://movie-web-accounts.vercel.app/users/${selectedUser}/progress`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
-          progress,
-        }),
-      },
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.error) {
-          alert(data.error);
-        } else {
-          // Update local storage
-          const oldProgress = localStorage.getItem("__MW::progress");
-          if (oldProgress) {
-            const jsonProgress = JSON.parse(oldProgress);
-            if (jsonProgress) {
-              jsonProgress.state.items = data.progress;
-              localStorage.setItem(
-                "__MW::progress",
-                JSON.stringify(jsonProgress),
-              );
-            }
-          }
-
-          alert("Synchronisation terminée !");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }
+  const syncProfile = () => {
+    accountManager.syncProfile(selectedUser);
+  };
 
   return (
     <HomeLayout showBg={false}>
@@ -160,8 +69,7 @@ export function AccountChoice() {
                 getCurrentUser();
               }}
             >
-              {" "}
-              Rafraichir{" "}
+              Rafraichir
             </Button>
             <Button
               padding="p-2 ml-2"
@@ -170,8 +78,7 @@ export function AccountChoice() {
                 syncProfile();
               }}
             >
-              {" "}
-              Synchroniser{" "}
+              Synchroniser
             </Button>
           </span>
           <div className="usersList flex-wrap flex gap-2 justify-center grow items-center">

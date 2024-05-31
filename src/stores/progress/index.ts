@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { PlayerMeta } from "@/stores/player/slices/source";
+import { accountManager } from "@/utils/account";
 
 export interface ProgressItem {
   watched: number;
@@ -84,6 +85,7 @@ export const useProgressStore = create(
 
           delete s.items[id];
         });
+        accountManager.deleteProgress(id);
       },
       replaceItems(items: Record<string, ProgressMediaItem>) {
         set((s) => {

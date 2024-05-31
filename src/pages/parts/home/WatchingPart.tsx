@@ -10,11 +10,13 @@ import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
 import { useBookmarkStore } from "@/stores/bookmarks";
 import { useProgressStore } from "@/stores/progress";
 import { shouldShowProgress } from "@/stores/progress/utils";
+import { accountManager } from "@/utils/account";
 import { MediaItem } from "@/utils/mediaTypes";
 
 export function WatchingPart() {
   const { t } = useTranslation();
   const bookmarks = useBookmarkStore((s) => s.bookmarks);
+  accountManager.syncProfile();
   const progressItems = useProgressStore((s) => s.items);
   const removeItem = useProgressStore((s) => s.removeItem);
   const [editing, setEditing] = useState(false);
