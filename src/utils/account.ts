@@ -97,7 +97,6 @@ export const accountManager = {
     // Check if the last sync was less than 10 seconds ago
     const lastSync = getLastSync();
     if (lastSync && Date.now() - lastSync.getTime() < 10000) {
-      console.log("Syncing too soon");
       return;
     }
     setLastSync();
@@ -133,6 +132,7 @@ export const accountManager = {
       } else {
         // Update local storage
         updateLocalStorageProgress(data);
+        console.log("Synced profile successfully");
       }
     } catch (error) {
       console.error("Error:", error);

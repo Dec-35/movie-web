@@ -104,7 +104,7 @@ export function Navigation(props: NavigationProps) {
               </a>
             </div>
             <div className="flex items-center space-x-1.5 ssm:space-x-3 relative pointer-events-auto">
-              <div className="text-xl text-white tabbable rounded-full">
+              <div className="text-xl text-white tabbable rounded-full ml-1.5">
                 <Link
                   to="/accountChoice"
                   className="text-white tabbable rounded-full"

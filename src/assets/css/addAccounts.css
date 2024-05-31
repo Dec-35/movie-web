@@ -1,18 +1,32 @@
-.accounts-container {
-  background-color: rgb(var(--colors-background-accentB));
-  border-radius: 8px;
-  margin-top: max(1rem, 20vh);
-  min-height: 200px;
-  display: flex;
-  flex-direction: column;
-}
-
 .account-avatar {
   transform: scale(2);
   margin: 1.1rem 1.5rem;
   transition: all 0.15s;
-  border: 1px solid transparent;
+  border: 1.5px solid transparent;
   cursor: pointer;
+}
+
+#refresh {
+  transform: rotate(0deg);
+  transition: transform 0.5s;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.paused {
+  animation-play-state: paused;
 }
 
 .avatar-container {
@@ -29,13 +43,18 @@
   top: 100%;
 }
 
-.account-avatar:hover {
+.account-avatar:not(#addAccount):hover {
   opacity: 0.8;
   border-color: rgb(var(--colors-secondary));
 }
 
 .avatar-wrapper.selected .account-avatar {
-  border-color: rgb(var(--colors-secondary));
+  border-color: rgb(229 231 235 / var(--tw-bg-opacity));
+
+}
+
+.account-avatar {
+  object-fit: cover;
 }
 
 .smaller-icon {
@@ -66,4 +85,37 @@
   line-height: 1rem;
   font-size: 0.7rem;
 
+}
+
+.userMessage {
+  height: 1rem;
+  color: rgb(69, 201, 69);
+}
+
+.userMessage:not(:empty) {
+
+  animation: show 5s ease-in-out forwards;
+}
+
+.usersList {
+  gap: 2rem 1rem;
+}
+
+@keyframes show {
+
+  0% {
+    opacity: 0;
+  }
+
+  6% {
+    opacity: 1;
+  }
+
+  94% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }

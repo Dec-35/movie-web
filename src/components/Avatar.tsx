@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import { base64ToBuffer, decryptData } from "@/backend/accounts/crypto";
 import { Icon, Icons } from "@/components/Icon";
@@ -44,11 +44,15 @@ export function AccountAvatar(props: {
   username?: string;
   iconImage?: string;
 }) {
-  return props.iconImage ? (
+  const [imageError, setImageError] = useState(false);
+
+  return props.iconImage && !imageError ? (
     <div className="flex-column avatar-container relative">
       <img
         className="rounded-full account-avatar w-[1.5rem] h-[1.5rem] ssm:w-[2rem] ssm:h-[2rem]"
         src={props.iconImage}
+        onError={() => setImageError(true)}
+        alt={`${props.username}'s avatar`}
       />
       <p>{props.username}</p>
     </div>
