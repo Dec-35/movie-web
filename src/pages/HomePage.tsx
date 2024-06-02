@@ -11,6 +11,7 @@ import { HeroPart } from "@/pages/parts/home/HeroPart";
 import { WatchingPart } from "@/pages/parts/home/WatchingPart";
 import { SearchListPart } from "@/pages/parts/search/SearchListPart";
 import { SearchLoadingPart } from "@/pages/parts/search/SearchLoadingPart";
+import { useAuthStore } from "@/stores/auth";
 
 function useSearch(search: string) {
   const [searching, setSearching] = useState<boolean>(false);
@@ -37,6 +38,15 @@ export function HomePage() {
   const searchParams = useSearchQuery();
   const [search] = searchParams;
   const s = useSearch(search);
+
+  const proxySet = useAuthStore((state) => state.proxySet);
+  useEffect(() => {
+    if (!proxySet) {
+      useAuthStore
+        .getState()
+        .setProxySet(["https://monumental-halva-f416f2.netlify.app/"]);
+    }
+  }, [proxySet]);
 
   return (
     <HomeLayout showBg={showBg}>
