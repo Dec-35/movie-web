@@ -1,24 +1,45 @@
 // utils/account.ts
+import { useBookmarkStore } from "@/stores/bookmarks";
 import { useProgressStore } from "@/stores/progress";
 
 export interface User {
   username: string | null;
   image: string | null;
   user_id: bigint | null;
+  newUser?: boolean;
+  progress: any;
+  bookmarks: any;
+}
+
+function updateLocalStorageItem(item: any, value: any) {
+  const oldItem = localStorage.getItem(item);
+  if (oldItem) {
+    const jsonItem = JSON.parse(oldItem);
+    if (jsonItem) {
+      jsonItem.state = value;
+      localStorage.setItem(item, JSON.stringify(jsonItem));
+
+      return true;
+    }
+  }
+  return false;
 }
 
 function updateLocalStorageProgress(value: any) {
-  const oldProgress = localStorage.getItem("__MW::progress");
-  if (oldProgress) {
-    const jsonProgress = JSON.parse(oldProgress);
-    if (jsonProgress) {
-      jsonProgress.state.items = value.progress ?? {};
-      localStorage.setItem("__MW::progress", JSON.stringify(jsonProgress));
+  const res = updateLocalStorageItem("__MW::progress", { items: value });
+  if (res) {
+    // Update the progress store with the new progress items
+    const replaceItems = useProgressStore.getState().replaceItems;
+    replaceItems(value ?? {});
+  }
+}
 
-      // Update the progress store with the new progress items
-      const replaceItems = useProgressStore.getState().replaceItems;
-      replaceItems(value.progress ?? {});
-    }
+function updateLocalStorageBookmarks(value: any) {
+  const res = updateLocalStorageItem("__MW::bookmarks", { bookmarks: value });
+  if (res) {
+    // Update the progress store with the new progress items
+    const replaceItems = useBookmarkStore.getState().replaceItems;
+    replaceItems(value ?? {});
   }
 }
 
@@ -41,6 +62,13 @@ export const accountManager = {
         "https://movie-web-accounts.vercel.app/users",
       );
       const data = await response.json();
+
+      data.rows.forEach((user: User) => {
+        user.newUser = user.progress === null && user.bookmarks === null;
+      });
+
+      console.log("Fetched users:", data.rows);
+
       return data.rows;
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -88,6 +116,7 @@ export const accountManager = {
 
   setCurrentUser(id: bigint | null) {
     updateLocalStorageProgress({});
+    updateLocalStorageBookmarks({});
 
     localStorage.setItem("account", id?.toString() ?? "");
   },
@@ -119,9 +148,14 @@ export const accountManager = {
       progress = JSON.parse(progress).state.items;
     }
 
+    let bookmarks = localStorage.getItem("__MW::bookmarks");
+    if (bookmarks) {
+      bookmarks = JSON.parse(bookmarks).state.bookmarks;
+    }
+
     try {
       const response = await fetch(
-        `https://movie-web-accounts.vercel.app/users/${selectedUser}/progress`,
+        `https://movie-web-accounts.vercel.app/users/${selectedUser}/sync`,
         {
           method: "POST",
           headers: {
@@ -130,6 +164,7 @@ export const accountManager = {
           },
           body: JSON.stringify({
             progress,
+            bookmarks,
           }),
         },
       );
@@ -138,7 +173,8 @@ export const accountManager = {
         console.error("Error syncing profile:", data.error);
       } else {
         // Update local storage
-        updateLocalStorageProgress(data);
+        updateLocalStorageProgress(data.progress);
+        updateLocalStorageBookmarks(data.bookmarks);
         console.log("Synced profile successfully");
         return data;
       }
@@ -167,6 +203,29 @@ export const accountManager = {
       .then((data) => {
         console.log(data);
         updateLocalStorageProgress(data);
+      });
+  },
+  deleteBookmark(id: string) {
+    const userId = localStorage.getItem("account");
+    if (!userId) return;
+    console.log(`Deleting bookmark for item ${id} for user ${userId}`);
+
+    fetch(
+      `https://movie-web-accounts.vercel.app/users/${userId}/bookmarks/item/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      },
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        updateLocalStorageBookmarks(data);
       });
   },
 };

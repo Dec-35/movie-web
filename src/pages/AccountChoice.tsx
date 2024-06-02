@@ -60,7 +60,12 @@ export function AccountChoice() {
   };
 
   const selectUser = (id: bigint | null) => () => {
-    accountManager.setCurrentUser(id);
+    const userToSelect = users.find((user) => user.user_id === id);
+    if (userToSelect?.newUser) {
+      localStorage.setItem("account", id?.toString() ?? "");
+    } else {
+      accountManager.setCurrentUser(id);
+    }
     setSelectedUser(id);
   };
 
@@ -136,7 +141,8 @@ export function AccountChoice() {
                   iconImage={user.image ?? undefined}
                 />
                 <button
-                  onClick={async () => {
+                  onClick={async (event) => {
+                    event.stopPropagation();
                     await deleteAccount(user.user_id);
                   }}
                   type="button"
@@ -158,7 +164,7 @@ export function AccountChoice() {
             </div>
           </div>
         </div>
-        <span className="flex justify-center mt-6">
+        <span className="flex justify-center mt-10">
           <button
             onClick={() => {
               syncProfile();

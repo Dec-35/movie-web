@@ -28,6 +28,7 @@ export interface BookmarkStore {
   addBookmark(meta: PlayerMeta): void;
   removeBookmark(id: string): void;
   replaceBookmarks(items: Record<string, BookmarkMediaItem>): void;
+  replaceItems(items: Record<string, BookmarkMediaItem>): void;
   clear(): void;
   clearUpdateQueue(): void;
   removeUpdateItem(id: string): void;
@@ -50,6 +51,12 @@ export const useBookmarkStore = create(
           });
 
           delete s.bookmarks[id];
+        });
+      },
+      replaceItems(items: Record<string, BookmarkMediaItem>) {
+        console.log("Replacing items", items);
+        set((s) => {
+          s.bookmarks = items;
         });
       },
       addBookmark(meta) {
