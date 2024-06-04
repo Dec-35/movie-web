@@ -202,7 +202,7 @@ export const accountManager = {
       })
       .then((data) => {
         console.log(data);
-        updateLocalStorageProgress(data);
+        updateLocalStorageProgress(data.progress);
       });
   },
   deleteBookmark(id: string) {
@@ -225,7 +225,7 @@ export const accountManager = {
       })
       .then((data) => {
         console.log(data);
-        updateLocalStorageBookmarks(data);
+        updateLocalStorageBookmarks(data.bookmarks);
       });
   },
 };

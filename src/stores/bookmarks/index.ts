@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { PlayerMeta } from "@/stores/player/slices/source";
+import { accountManager } from "@/utils/account";
 
 export interface BookmarkMediaItem {
   title: string;
@@ -42,19 +43,20 @@ export const useBookmarkStore = create(
       bookmarks: {},
       updateQueue: [],
       removeBookmark(id) {
-        set((s) => {
-          updateId += 1;
-          s.updateQueue.push({
-            id: updateId.toString(),
-            action: "delete",
-            tmdbId: id,
-          });
+        // set((s) => {
+        //   updateId += 1;
+        //   s.updateQueue.push({
+        //     id: updateId.toString(),
+        //     action: "delete",
+        //     tmdbId: id,
+        //   });
 
-          delete s.bookmarks[id];
-        });
+        //   delete s.bookmarks[id];
+        // });
+        accountManager.deleteBookmark(id);
       },
       replaceItems(items: Record<string, BookmarkMediaItem>) {
-        console.log("Replacing items", items);
+        console.log("Replacing bookmark items", items);
         set((s) => {
           s.bookmarks = items;
         });

@@ -75,20 +75,20 @@ export const useProgressStore = create(
       items: {},
       updateQueue: [],
       removeItem(id) {
-        set((s) => {
-          updateId += 1;
-          s.updateQueue.push({
-            id: updateId.toString(),
-            action: "delete",
-            tmdbId: id,
-          });
+        // set((s) => {
+        //   updateId += 1;
+        //   s.updateQueue.push({
+        //     id: updateId.toString(),
+        //     action: "delete",
+        //     tmdbId: id,
+        //   });
 
-          delete s.items[id];
-        });
+        //   delete s.items[id];
+        // });
         accountManager.deleteProgress(id);
       },
       replaceItems(items: Record<string, ProgressMediaItem>) {
-        console.log("Replacing items", items);
+        console.log("Replacing progress items", items);
         set((s) => {
           s.items = items;
         });
