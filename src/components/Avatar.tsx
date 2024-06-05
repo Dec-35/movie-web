@@ -43,27 +43,44 @@ export function Avatar(props: AvatarProps) {
 export function AccountAvatar(props: {
   username?: string;
   iconImage?: string;
+  deletable: boolean;
+  delete(): Promise<void>;
+  selected?: boolean;
 }) {
   const [imageError, setImageError] = useState(false);
 
+  const editOverlay = (
+    <div className="close-button" onClick={props.delete}>
+      <Icon className="flex justify-center text-white" icon={Icons.X} />
+    </div>
+  );
+
   return props.iconImage && !imageError ? (
     <div className="flex-column avatar-container relative">
-      <img
-        className="rounded-full account-avatar w-[1.5rem] h-[1.5rem] ssm:w-[2rem] ssm:h-[2rem]"
-        src={props.iconImage}
-        onError={() => setImageError(true)}
-        alt={`${props.username}'s avatar`}
-      />
-      <p>{props.username}</p>
+      <div className="rounded-full account-avatar w-[1.5rem] h-[1.5rem] ssm:w-[2rem] ssm:h-[2rem]">
+        <img
+          src={props.iconImage}
+          onError={() => setImageError(true)}
+          alt={`${props.username}'s avatar`}
+          className="rounded-full "
+        />
+        <p className={`username${props.selected ? " text-white" : ""}`}>
+          {props.username}
+        </p>
+        {props.deletable ? editOverlay : null}
+      </div>
     </div>
   ) : (
     <div className="flex-column avatar-container relative">
       <div className="relative inline-block">
-        <div className="account-avatar w-[1.5rem] h-[1.5rem] ssm:w-[2rem] ssm:h-[2rem] rounded-full overflow-hidden bg-type-dimmed flex items-center justify-center text-white">
-          <Icon icon={Icons.USER} className="text-base ssm:text-xl" />
+        <div className="account-avatar w-[1.5rem] h-[1.5rem] ssm:w-[2rem] ssm:h-[2rem] rounded-full bg-type-dimmed flex items-center justify-center">
+          <Icon icon={Icons.USER} className="text-white ssm:text-xl" />
+          <p className={`username${props.selected ? " text-white" : ""}`}>
+            {props.username}
+          </p>
+          {props.deletable ? editOverlay : null}
         </div>
       </div>
-      <p>{props.username}</p>
     </div>
   );
 }

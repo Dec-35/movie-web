@@ -86,22 +86,6 @@ export function Navigation(props: NavigationProps) {
               >
                 <BrandPill clickable />
               </Link>
-              <a
-                href={conf().DISCORD_LINK}
-                target="_blank"
-                rel="noreferrer"
-                className="text-xl text-white tabbable rounded-full"
-              >
-                <IconPatch icon={Icons.DISCORD} clickable downsized />
-              </a>
-              <a
-                href={conf().GITHUB_LINK}
-                target="_blank"
-                rel="noreferrer"
-                className="text-xl text-white tabbable rounded-full"
-              >
-                <IconPatch icon={Icons.GITHUB} clickable downsized />
-              </a>
             </div>
             <div className="flex items-center space-x-1.5 ssm:space-x-3 relative pointer-events-auto">
               <div className="text-xl text-white tabbable rounded-full ml-1.5">

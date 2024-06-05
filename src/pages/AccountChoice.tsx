@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { AccountAvatar } from "@/components/Avatar";
 import { Button } from "@/components/buttons/Button";
+import { EditButton } from "@/components/buttons/EditButton";
 import { Icon, Icons } from "@/components/Icon";
 import { SectionHeading } from "@/components/layout/SectionHeading";
 import { WideContainer } from "@/components/layout/WideContainer";
@@ -49,6 +50,8 @@ export function AccountChoice() {
   }, []);
 
   const deleteAccount = async (id: bigint | null) => {
+    // eslint-disable-next-line no-restricted-globals
+    if (!confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) return;
     await accountManager.deleteUser(id);
     console.log("User deleted", id, selectedUser);
     loadUsers();
@@ -57,6 +60,26 @@ export function AccountChoice() {
       localStorage.removeItem("account");
     }
     setMessage("Utilisateur supprimé");
+  };
+
+  const editAccount = async (id: bigint | null) => {
+    const username = prompt("Nom d'utilisateur:");
+    if (username) {
+      const image = prompt("URL de l'image:");
+
+      if (image) {
+        const response = await accountManager.editUser(id, username, image);
+        if (response.error) {
+          setError(response.error);
+        } else {
+          console.log("Success:", response);
+          setMessage("Utilisateur modifié avec succès");
+          loadUsers();
+        }
+      } else {
+        setError("URL de l'image invalide");
+      }
+    }
   };
 
   const selectUser = (id: bigint | null) => () => {
@@ -94,13 +117,17 @@ export function AccountChoice() {
     return () => clearTimeout(timer);
   }, [error]);
 
+  const [editing, setEditing] = useState(false);
+
   return (
     <HomeLayout showBg={false}>
       <div className="mb-16 sm:mb-24" />
       <WideContainer classNames="relative mt-40">
         <SectionHeading title="Utilisateurs" icon={Icons.USER}>
+          <EditButton editing={editing} onEdit={setEditing} />
+
           <button
-            className="paused spin flex h-12 items-center overflow-hidden rounded-full bg-background-secondary px-4 py-2 text-white transition-[background-color,transform] hover:bg-background-secondaryHover active:scale-105"
+            className="paused ml-2 spin flex h-12 items-center overflow-hidden rounded-full bg-background-secondary px-4 py-2 text-white transition-[background-color,transform] hover:bg-background-secondaryHover active:scale-105"
             type="button"
             id="refresh"
             onClick={async () => {
@@ -129,7 +156,8 @@ export function AccountChoice() {
             {users?.map((user) => (
               <div
                 className={`user-${user.user_id} relative avatar-wrapper ${
-                  selectedUser?.toString() === user.user_id?.toString()
+                  selectedUser?.toString() === user.user_id?.toString() &&
+                  !editing
                     ? "selected"
                     : ""
                 }`}
@@ -139,15 +167,22 @@ export function AccountChoice() {
                 <AccountAvatar
                   username={user.username ?? undefined}
                   iconImage={user.image ?? undefined}
+                  deletable={editing}
+                  delete={() => deleteAccount(user.user_id)}
+                  selected={selectedUser === user.user_id}
                 />
                 <button
                   onClick={async (event) => {
                     event.stopPropagation();
-                    await deleteAccount(user.user_id);
+                    await editAccount(user.user_id);
                   }}
                   type="button"
-                  className="absolute top-0 right-0 close-button"
-                />
+                  className={`absolute top-0 right-0 edit-button${
+                    editing ? " hidden" : ""
+                  }`}
+                >
+                  <Icon icon={Icons.EDIT} />
+                </button>
               </div>
             ))}
             <div
@@ -155,7 +190,7 @@ export function AccountChoice() {
                 addAccount();
               }}
               id="addAccount"
-              className="hover:bg-background-secondaryHover bg-background-secondary account-avatar w-[2.5rem] h-[1.5rem] ssm:w-[2rem] ssm:h-[2rem] rounded-full overflow-hidden flex items-center justify-center text-white"
+              className="hover:bg-background-secondaryHover m-4 bg-background-secondary account-avatar w-[2.5rem] h-[1.5rem] ssm:w-[2rem] ssm:h-[2rem] rounded-full overflow-hidden flex items-center justify-center text-white"
             >
               <Icon
                 icon={Icons.PLUS}

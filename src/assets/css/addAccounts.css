@@ -1,6 +1,5 @@
 .account-avatar {
   transform: scale(2);
-  margin: 1.1rem 1.5rem;
   transition: all 0.15s;
   border: 1.5px solid transparent;
   cursor: pointer;
@@ -34,13 +33,17 @@
   justify-content: center;
 }
 
-.avatar-container p {
+.avatar-container p,
+.username {
   text-align: center;
   position: absolute;
   width: 100%;
-  min-width: fit-content;
   max-width: 200%;
   top: 100%;
+  transform: scale(50%);
+  opacity: 0.5;
+  display: flex;
+  justify-content: center;
 }
 
 .account-avatar:not(#addAccount):hover {
@@ -50,11 +53,16 @@
 
 .avatar-wrapper.selected .account-avatar {
   border-color: rgb(229 231 235 / var(--tw-bg-opacity));
-
 }
 
-.account-avatar {
+.avatar-wrapper {
+  margin: 1rem;
+}
+
+.account-avatar img {
   object-fit: cover;
+  aspect-ratio: 1;
+  height: 100%;
 }
 
 .smaller-icon {
@@ -62,12 +70,14 @@
 }
 
 
-.avatar-wrapper:hover .close-button {
-  display: flex;
+.avatar-wrapper:hover .edit-button:not(.hidden) {
+  opacity: 1;
+  pointer-events: all;
 }
 
-.close-button {
-  display: none;
+.edit-button {
+  display: flex;
+  opacity: 0;
   justify-content: center;
   align-items: center;
   border: none;
@@ -75,17 +85,12 @@
   background-color: white;
   aspect-ratio: 1;
   padding: 0.3rem;
+  pointer-events: none;
+  transition: opacity 0.1s;
+  cursor: pointer;
+  transform: translate(80%, -80%);
 }
 
-.close-button::after {
-  content: 'x';
-  font-size: 1.5rem;
-  color: rgb(var(--colors-text));
-  height: fit-content;
-  line-height: 1rem;
-  font-size: 0.7rem;
-
-}
 
 .userMessage {
   height: 1rem;
@@ -122,4 +127,17 @@
   100% {
     opacity: 0;
   }
+}
+
+.close-button {
+  background-color: rgba(20, 20, 40, 0.8);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  aspect-ratio: 1;
+  margin: 0 auto;
+  flex-grow: 1;
 }

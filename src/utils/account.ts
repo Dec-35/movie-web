@@ -109,6 +109,25 @@ export const accountManager = {
     }
   },
 
+  async editUser(id: bigint | null, username: string, image: string) {
+    try {
+      const response = await fetch(
+        `https://movie-web-accounts.vercel.app/users/${id}/edit`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+          body: JSON.stringify({ username, image }),
+        },
+      );
+      return await response.json();
+    } catch (error) {
+      console.error("Error editing user:", error);
+    }
+  },
+
   getCurrentUser(): bigint | null {
     const account = localStorage.getItem("account");
     return account ? BigInt(account) : null;
@@ -130,9 +149,9 @@ export const accountManager = {
     Backend takes care of the merge and returns the updated progress
     
     */
-    // Check if the last sync was less than 5 seconds ago
+    // Check if the last sync was less than 1.5 second ago
     const lastSync = getLastSync();
-    if (lastSync && Date.now() - lastSync.getTime() < 5000) {
+    if (lastSync && Date.now() - lastSync.getTime() < 1500) {
       return;
     }
     setLastSync();
