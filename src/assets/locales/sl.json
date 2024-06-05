@@ -92,7 +92,8 @@
     "tagline": "Z odprtokodno aplikacijo movie-web si oglejte najljubše oddaje in filme."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "O projektu",
       "dmca": "DMCA",
@@ -138,9 +139,7 @@
       },
       "morning": {
         "default": "Kateri film ali serijo bi si želeli ogledati ob tem jutru?",
-        "extra": [
-          "Slišala sem, da je film \"Pred sončnim vzhodom\" odličen"
-        ]
+        "extra": ["Slišala sem, da je film \"Pred sončnim vzhodom\" odličen"]
       },
       "night": {
         "default": "Kateri film ali serijo bi si želeli ogledati nocoj?",

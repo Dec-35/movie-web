@@ -92,7 +92,8 @@
     "tagline": "Vaadake selle avatud lähtekoodiga striimimis rakendusega oma lemmiksaateid ja -filme."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "Meist",
       "dmca": "DMCA",
@@ -138,15 +139,11 @@
       },
       "morning": {
         "default": "Mida te soovite täna hommikul vaadata?",
-        "extra": [
-          "Ma kuulsin, et Before Sunrise on hea"
-        ]
+        "extra": ["Ma kuulsin, et Before Sunrise on hea"]
       },
       "night": {
         "default": "Mida te soovite täna õhtul vaadata?",
-        "extra": [
-          "Väsinud? Olen kuulnud, et The Exorcist on hea."
-        ]
+        "extra": ["Väsinud? Olen kuulnud, et The Exorcist on hea."]
       }
     }
   },

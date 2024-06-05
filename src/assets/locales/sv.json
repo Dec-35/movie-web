@@ -89,7 +89,8 @@
     "tagline": "Titta på dina favoritprogram och filmer helt gratis."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "Om oss",
       "dmca": "DMCA",

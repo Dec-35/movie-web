@@ -92,7 +92,8 @@
     "tagline": "Oglądaj swoje ulubione seriale i filmy za pomocą tej aplikacji streamingowej typu open source."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "Informacje",
       "dmca": "DMCA",
@@ -138,15 +139,11 @@
       },
       "morning": {
         "default": "Co chciałbyś obejrzeć dziś rano?",
-        "extra": [
-          "Słyszałem że „Przed wschodem słońca” jest dobre"
-        ]
+        "extra": ["Słyszałem że „Przed wschodem słońca” jest dobre"]
       },
       "night": {
         "default": "Co chciałbyś obejrzeć dziś wieczorem?",
-        "extra": [
-          "Zmęczony? Słyszałem że „Egzorcysta” jest dobry."
-        ]
+        "extra": ["Zmęczony? Słyszałem że „Egzorcysta” jest dobry."]
       }
     }
   },

@@ -92,7 +92,8 @@
     "tagline": "Urmăriți emisiunile și filmele preferate cu această aplicație de streaming open source."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "Despre",
       "dmca": "DMCA",
@@ -138,15 +139,11 @@
       },
       "morning": {
         "default": "La ce dorești să te in uiți dimineață aceasta?",
-        "extra": [
-          "Aud că Before Sunrise este bun"
-        ]
+        "extra": ["Aud că Before Sunrise este bun"]
       },
       "night": {
         "default": "La ce dorești să te uiți în astă seară?",
-        "extra": [
-          "Obosit? Aud că The Exorcist is good."
-        ]
+        "extra": ["Obosit? Aud că The Exorcist is good."]
       }
     }
   },

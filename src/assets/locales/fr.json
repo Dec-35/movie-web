@@ -92,7 +92,8 @@
     "tagline": "Regardez vos séries et films préférés avec cette application de streaming open source."
   },
   "global": {
-    "name": "Home",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "À propos",
       "dmca": "DMCA",

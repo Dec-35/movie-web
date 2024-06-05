@@ -90,7 +90,8 @@
     "tagline": "Гледайте любимите си предавания и филми с това отворено-код стрийминг приложение."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "За нас",
       "dmca": "DMCA",

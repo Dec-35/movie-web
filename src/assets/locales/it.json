@@ -92,7 +92,8 @@
     "tagline": "Guardate i vostri preferiti programmi televisivi e film con questo app di streaming open source."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "Su di movie-web",
       "dmca": "DMCA",
@@ -138,15 +139,11 @@
       },
       "morning": {
         "default": "Cosa vorresti guardare questa mattina?",
-        "extra": [
-          "Ho sentito che «Prima Dell'alba» è buono"
-        ]
+        "extra": ["Ho sentito che «Prima Dell'alba» è buono"]
       },
       "night": {
         "default": "Cosa vorresti guardare questa sera?",
-        "extra": [
-          "Stanco? Ho sentito che L'esorciccio è buono."
-        ]
+        "extra": ["Stanco? Ho sentito che L'esorciccio è buono."]
       }
     }
   },

@@ -27,7 +27,7 @@ export function BrandPill(props: {
           props.hideTextOnMobile ? "hidden sm:block" : "",
         ].join(" ")}
       >
-        {t("global.name")}
+        {t("global.home")}
       </span>
     </div>
   );

@@ -92,7 +92,8 @@
     "tagline": "Bekijk je favoriete shows en films met deze open source streaming app."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "Over",
       "dmca": "DMCA",
@@ -138,15 +139,11 @@
       },
       "morning": {
         "default": "Waar wil je deze ochtend naar kijken?",
-        "extra": [
-          "Ik hoor dat Before Sunrise goed is"
-        ]
+        "extra": ["Ik hoor dat Before Sunrise goed is"]
       },
       "night": {
         "default": "Wat wil je vanavond bekijken?",
-        "extra": [
-          "Moe? Ik hoor dat The Exorcist goed is."
-        ]
+        "extra": ["Moe? Ik hoor dat The Exorcist goed is."]
       }
     }
   },
