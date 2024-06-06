@@ -111,6 +111,11 @@
     "continueWatching": {
       "sectionTitle": "Continue Watching"
     },
+
+    "trending": {
+      "sectionTitle": "Trending"
+    },
+
     "mediaList": {
       "stopEditing": "Stop editing"
     },

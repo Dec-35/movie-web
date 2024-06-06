@@ -13,6 +13,8 @@ import { SearchListPart } from "@/pages/parts/search/SearchListPart";
 import { SearchLoadingPart } from "@/pages/parts/search/SearchLoadingPart";
 import { useAuthStore } from "@/stores/auth";
 
+import { TrendingPart } from "./parts/home/TrendingPart";
+
 function useSearch(search: string) {
   const [searching, setSearching] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -65,6 +67,7 @@ export function HomePage() {
           <>
             <BookmarksPart />
             <WatchingPart />
+            <TrendingPart />
           </>
         )}
       </WideContainer>

@@ -1,0 +1,42 @@
+.switch-container {
+  width: fit-content;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  background-color: rgb(var(--colors-background-secondary));
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  position: relative;
+}
+
+.switch-container button {
+  z-index: 50;
+  transition: color 150ms ease-out;
+}
+
+.switch-container .indicator {
+  display: block;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  bottom: 5px;
+  right: auto;
+  width: 48%;
+  border-radius: 6px;
+  background-color: rgb(var(--colors-background-main));
+  z-index: 20;
+  transition: all 150ms ease-out;
+  transform: translateX(0);
+}
+
+.switch-container[data-left="false"] .indicator {
+  transform: translateX(98%);
+}
+
+.switch-container[data-left="false"] #week {
+  color: rgb(var(--colors-type-emphasis));
+}
+
+.switch-container[data-left="true"] #day {
+  color: rgb(var(--colors-type-emphasis));
+}

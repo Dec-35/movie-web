@@ -200,6 +200,22 @@ export async function multiSearch(
   return results;
 }
 
+export async function getTrending(
+  period: string,
+): Promise<(TMDBMovieSearchResult | TMDBShowSearchResult)[]> {
+  const data = await get<TMDBSearchResult>(`trending/all/${period}`, {
+    language: "en-US",
+    page: 1,
+  });
+  // filter out results that aren't movies or shows
+  const results = data.results.filter(
+    (r) =>
+      r.media_type === TMDBContentTypes.MOVIE ||
+      r.media_type === TMDBContentTypes.TV,
+  );
+  return results;
+}
+
 export async function generateQuickSearchMediaUrl(
   query: string,
 ): Promise<string | undefined> {
@@ -292,4 +308,15 @@ export function formatTMDBSearchResult(
     original_release_date: new Date(movie.release_date),
     object_type: mediatype,
   };
+}
+
+export async function getTrendingMediaItems(
+  period: string,
+): Promise<MediaItem[]> {
+  const data = await getTrending(period);
+  return data.map((result) =>
+    formatTMDBMetaToMediaItem(
+      formatTMDBSearchResult(result, result.media_type),
+    ),
+  );
 }
