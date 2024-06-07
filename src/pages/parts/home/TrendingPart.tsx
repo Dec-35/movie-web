@@ -20,7 +20,7 @@ export function TrendingPart() {
     getTrendingMediaItems(period).then((elements) => {
       setItems(elements);
     });
-  });
+  }, [period]);
 
   return (
     <div>

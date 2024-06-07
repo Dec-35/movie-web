@@ -370,15 +370,23 @@ export async function getRecommendations(
     }
   });
 
-  // Create the final list with unique items and their scores
-  const finalList = Object.values(itemCounts).map(({ item, count }) => ({
-    ...item,
-    score: count,
-  }));
+  // Create a set of input item IDs for easy lookup
+  const inputItemIds = new Set(userMedia.map((item) => item.id));
 
+  // Create the final list with unique items and their scores, excluding input items
+  const finalList = Object.values(itemCounts)
+    .map(({ item, count }) => ({
+      ...item,
+      score: count,
+    }))
+    .filter((item) => !inputItemIds.has(item.id));
+
+  // Sort by score in descending order and take the top 20 items
   const sortedFinalList = finalList
     .sort((a, b) => b.score - a.score)
     .slice(0, 20);
+
+  console.log("User recommendations: ", sortedFinalList);
 
   return sortedFinalList;
 }
