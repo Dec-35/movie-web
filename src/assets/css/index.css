@@ -321,3 +321,17 @@ input[type=range].styled-slider.slider-progress::-ms-fill-lower {
   display: block;
   pointer-events: none;
 }
+
+.video-buttonBackground {
+  position: absolute;
+  bottom: 10px;
+  right: calc(-1rem + 5px);
+  opacity: 0;
+}
+
+.media-card-link:hover~.video-buttonBackground,
+.media-card-link:focus~.video-buttonBackground,
+.video-buttonBackground:hover,
+.video-buttonBackground:focus {
+  opacity: 1;
+}

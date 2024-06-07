@@ -4,6 +4,7 @@ import { immer } from "zustand/middleware/immer";
 
 import { PlayerMeta } from "@/stores/player/slices/source";
 import { accountManager } from "@/utils/account";
+import { MediaItem } from "@/utils/mediaTypes";
 
 export interface BookmarkMediaItem {
   title: string;
@@ -27,6 +28,7 @@ export interface BookmarkStore {
   bookmarks: Record<string, BookmarkMediaItem>;
   updateQueue: BookmarkUpdateItem[];
   addBookmark(meta: PlayerMeta): void;
+  addMediaBookmark(media: MediaItem): void;
   removeBookmark(id: string): void;
   replaceBookmarks(items: Record<string, BookmarkMediaItem>): void;
   replaceItems(items: Record<string, BookmarkMediaItem>): void;
@@ -56,7 +58,6 @@ export const useBookmarkStore = create(
         accountManager.deleteBookmark(id);
       },
       replaceItems(items: Record<string, BookmarkMediaItem>) {
-        console.log("Replacing bookmark items", items);
         set((s) => {
           s.bookmarks = items;
         });
@@ -79,6 +80,28 @@ export const useBookmarkStore = create(
             title: meta.title,
             year: meta.releaseYear,
             poster: meta.poster,
+            updatedAt: Date.now(),
+          };
+        });
+      },
+      addMediaBookmark(media: MediaItem) {
+        set((s) => {
+          updateId += 1;
+          s.updateQueue.push({
+            id: updateId.toString(),
+            action: "add",
+            tmdbId: media.id,
+            type: media.type,
+            title: media.title,
+            year: media.year,
+            poster: media.poster,
+          });
+
+          s.bookmarks[media.id] = {
+            type: media.type,
+            title: media.title,
+            year: media.year,
+            poster: media.poster,
             updatedAt: Date.now(),
           };
         });

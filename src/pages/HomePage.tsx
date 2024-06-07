@@ -66,8 +66,8 @@ export function HomePage() {
           <SearchListPart searchQuery={search} />
         ) : (
           <>
-            <BookmarksPart />
             <WatchingPart />
+            <BookmarksPart />
             <RecommendedPart />
             <TrendingPart />
           </>

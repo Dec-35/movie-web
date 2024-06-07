@@ -364,7 +364,7 @@ export async function getRecommendations(
   allItems.forEach((item) => {
     const key = item.id; // Assuming MediaItem has an 'id' property
     if (itemCounts[key]) {
-      itemCounts[key].count += 1;
+      itemCounts[key].count += 2;
     } else {
       itemCounts[key] = { item, count: 1 };
     }
@@ -386,12 +386,10 @@ export async function getRecommendations(
     item.score += 1;
   });
 
-  // Sort by score in descending order and take the top 20 items
+  // Sort by score in descending order and take the top items
   const sortedFinalList = finalList
     .sort((a, b) => b.score - a.score)
-    .slice(0, 20);
-
-  console.log("User recommendations: ", sortedFinalList);
+    .slice(0, 40);
 
   return sortedFinalList;
 }

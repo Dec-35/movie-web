@@ -10,6 +10,7 @@ import { MediaItem } from "@/utils/mediaTypes";
 
 import { IconPatch } from "../buttons/IconPatch";
 import { Icons } from "../Icon";
+import { BookmarkButton, ItemBookmarkButton } from "../player/Player";
 
 export interface MediaCardProps {
   media: MediaItem;
@@ -154,9 +155,11 @@ function MediaCardContent({
             />
           </div>
         </div>
-        <h1 className="mb-1 line-clamp-3 max-h-[4.5rem] text-ellipsis break-words font-bold text-white">
-          <span>{media.title}</span>
-        </h1>
+        <div>
+          <h1 className="mb-1 line-clamp-3 max-h-[4.5rem] text-ellipsis break-words font-bold text-white">
+            <span>{media.title}</span>
+          </h1>
+        </div>
         <DotList className="text-xs" content={dotListContent} />
       </Flare.Child>
     </Flare.Base>
@@ -188,15 +191,18 @@ export function MediaCard(props: MediaCardProps) {
 
   if (!canLink) return <span>{content}</span>;
   return (
-    <Link
-      to={link}
-      tabIndex={-1}
-      className={classNames(
-        "tabbable",
-        props.closable ? "hover:cursor-default" : "",
-      )}
-    >
-      {content}
-    </Link>
+    <div className="relative">
+      <Link
+        to={link}
+        tabIndex={-1}
+        className={classNames(
+          "tabbable media-card-link",
+          props.closable ? "hover:cursor-default" : "",
+        )}
+      >
+        {content}
+      </Link>
+      <ItemBookmarkButton item={props.media} />
+    </div>
   );
 }

@@ -48,7 +48,9 @@ export function Chromecast(props: ChromecastProps) {
       ].join(" ")}
       icon={Icons.CASTING}
       onClick={(el) => {
-        const castButton = el.querySelector("google-cast-launcher");
+        const castButton = (el.target as HTMLElement).querySelector(
+          "google-cast-launcher",
+        );
         if (castButton) (castButton as HTMLDivElement).click();
       }}
     />

@@ -67,8 +67,6 @@ export const accountManager = {
         user.newUser = user.progress === null && user.bookmarks === null;
       });
 
-      console.log("Fetched users:", data.rows);
-
       return data.rows;
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -220,7 +218,6 @@ export const accountManager = {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         updateLocalStorageProgress(data.progress);
       });
   },
@@ -243,7 +240,6 @@ export const accountManager = {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         updateLocalStorageBookmarks(data.bookmarks);
       });
   },
