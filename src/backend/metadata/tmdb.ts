@@ -381,6 +381,11 @@ export async function getRecommendations(
     }))
     .filter((item) => !inputItemIds.has(item.id));
 
+  const randomItems = finalList.filter(() => Math.random() > 0.8);
+  randomItems.forEach((item) => {
+    item.score += 1;
+  });
+
   // Sort by score in descending order and take the top 20 items
   const sortedFinalList = finalList
     .sort((a, b) => b.score - a.score)

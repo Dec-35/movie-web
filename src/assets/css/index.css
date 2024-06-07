@@ -258,7 +258,7 @@ input[type=range].styled-slider.slider-progress::-ms-fill-lower {
 
 @media (min-width: 768px) {
   .horizontal-scroll-container>* {
-    width: calc(100% / 4);
+    width: calc(100% / 6);
     /* For md:grid-cols-4 */
   }
 }
@@ -298,7 +298,8 @@ input[type=range].styled-slider.slider-progress::-ms-fill-lower {
 
 .arrow.right-0::before {
   content: '';
-  height: 381.5px;
+  max-height: 370px;
+  height: 30vw;
   background: linear-gradient(-90deg, rgba(13, 10, 19, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
   width: 200px;
   left: -50%;
@@ -310,7 +311,8 @@ input[type=range].styled-slider.slider-progress::-ms-fill-lower {
 
 .arrow.left-0::before {
   content: '';
-  height: 381.5px;
+  max-height: 370px;
+  height: 30vw;
   background: linear-gradient(90deg, rgba(13, 10, 19, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
   width: 200px;
   right: -50%;

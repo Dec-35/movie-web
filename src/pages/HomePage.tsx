@@ -59,7 +59,7 @@ export function HomePage() {
         </Helmet>
         <HeroPart searchParams={searchParams} setIsSticky={setShowBg} />
       </div>
-      <WideContainer>
+      <WideContainer ultraWide>
         {s.loading ? (
           <SearchLoadingPart />
         ) : s.searching ? (

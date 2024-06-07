@@ -10,7 +10,7 @@
 }
 
 .switch-container button {
-  z-index: 50;
+  z-index: 6;
   transition: color 150ms ease-out;
 }
 
@@ -28,7 +28,7 @@
   width: 48%;
   border-radius: 6px;
   background-color: rgb(var(--colors-background-main));
-  z-index: 20;
+  z-index: 5;
   transition: all 150ms ease-out;
   transform: translateX(0);
 }
