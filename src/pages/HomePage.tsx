@@ -68,8 +68,8 @@ export function HomePage() {
           <>
             <BookmarksPart />
             <WatchingPart />
-            <TrendingPart />
             <RecommendedPart />
+            <TrendingPart />
           </>
         )}
       </WideContainer>
