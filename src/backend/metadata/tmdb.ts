@@ -348,11 +348,37 @@ export async function getRecommendations(
     getRelated(media.id, mediaItemTypeToMediaType(media.type)),
   );
   const results = await Promise.all(promises);
-  return results
+
+  // Flatten the results into a single array
+  const allItems = results
     .flat()
     .map((result) =>
       formatTMDBMetaToMediaItem(
         formatTMDBSearchResult(result, result.media_type),
       ),
     );
+
+  // Count occurrences of each item
+  const itemCounts: { [key: string]: { item: MediaItem; count: number } } = {};
+
+  allItems.forEach((item) => {
+    const key = item.id; // Assuming MediaItem has an 'id' property
+    if (itemCounts[key]) {
+      itemCounts[key].count += 1;
+    } else {
+      itemCounts[key] = { item, count: 1 };
+    }
+  });
+
+  // Create the final list with unique items and their scores
+  const finalList = Object.values(itemCounts).map(({ item, count }) => ({
+    ...item,
+    score: count,
+  }));
+
+  const sortedFinalList = finalList
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 20);
+
+  return sortedFinalList;
 }
