@@ -8,7 +8,6 @@ import { Icons } from "@/components/Icon";
 import { SectionHeading } from "@/components/layout/SectionHeading";
 import { MediaGrid } from "@/components/media/MediaGrid";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
-import { conf } from "@/setup/config";
 import { MediaItem } from "@/utils/mediaTypes";
 
 export function TrendingPart() {

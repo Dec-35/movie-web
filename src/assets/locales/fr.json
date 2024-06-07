@@ -115,7 +115,9 @@
     "trending": {
       "sectionTitle": "En ce moment"
     },
-
+    "recommended": {
+      "sectionTitle": "Recommandé pour vous"
+    },
     "mediaList": {
       "stopEditing": "Arrêter l'édition"
     },

@@ -216,6 +216,26 @@ export async function getTrending(
   return results;
 }
 
+export async function getRelated(
+  id: string,
+  type: MWMediaType,
+): Promise<(TMDBMovieSearchResult | TMDBShowSearchResult)[]> {
+  const data = await get<TMDBSearchResult>(
+    `${mediaTypeToTMDB(type)}/${id}/recommendations`,
+    {
+      language: "en-US",
+      page: 1,
+    },
+  );
+  // filter out results that aren't movies or shows
+  const results = data.results.filter(
+    (r) =>
+      r.media_type === TMDBContentTypes.MOVIE ||
+      r.media_type === TMDBContentTypes.TV,
+  );
+  return results;
+}
+
 export async function generateQuickSearchMediaUrl(
   query: string,
 ): Promise<string | undefined> {
@@ -319,4 +339,20 @@ export async function getTrendingMediaItems(
       formatTMDBSearchResult(result, result.media_type),
     ),
   );
+}
+
+export async function getRecommendations(
+  userMedia: MediaItem[],
+): Promise<MediaItem[]> {
+  const promises = userMedia.map((media) =>
+    getRelated(media.id, mediaItemTypeToMediaType(media.type)),
+  );
+  const results = await Promise.all(promises);
+  return results
+    .flat()
+    .map((result) =>
+      formatTMDBMetaToMediaItem(
+        formatTMDBSearchResult(result, result.media_type),
+      ),
+    );
 }

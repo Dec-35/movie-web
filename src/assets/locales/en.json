@@ -115,7 +115,9 @@
     "trending": {
       "sectionTitle": "Trending"
     },
-
+    "recommended": {
+      "sectionTitle": "For you"
+    },
     "mediaList": {
       "stopEditing": "Stop editing"
     },

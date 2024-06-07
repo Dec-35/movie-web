@@ -13,6 +13,7 @@ import { SearchListPart } from "@/pages/parts/search/SearchListPart";
 import { SearchLoadingPart } from "@/pages/parts/search/SearchLoadingPart";
 import { useAuthStore } from "@/stores/auth";
 
+import { RecommendedPart } from "./parts/home/RecommendedPart";
 import { TrendingPart } from "./parts/home/TrendingPart";
 
 function useSearch(search: string) {
@@ -68,6 +69,7 @@ export function HomePage() {
             <BookmarksPart />
             <WatchingPart />
             <TrendingPart />
+            <RecommendedPart />
           </>
         )}
       </WideContainer>
