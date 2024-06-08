@@ -335,3 +335,44 @@ input[type=range].styled-slider.slider-progress::-ms-fill-lower {
 .video-buttonBackground:focus {
   opacity: 1;
 }
+
+.mediaPreview {
+  display: none;
+
+  width: 80vw;
+  height: 80vh;
+  max-width: 1000px;
+  max-height: 600px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  z-index: 1000;
+  background-color: rgb(var(--colors-background-main));
+  border-radius: 8px;
+  opacity: 0;
+}
+
+.mediaPreview.active {
+  display: block;
+  animation: appear 0.15s ease-out forwards;
+
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.mediaPreview .video-buttonBackground.bookmarkButton {
+  z-index: 1001;
+  position: relative;
+  opacity: 1;
+}

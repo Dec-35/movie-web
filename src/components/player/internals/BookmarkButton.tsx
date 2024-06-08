@@ -33,7 +33,10 @@ export function BookmarkButton() {
   );
 }
 
-export function ItemBookmarkButton(props: { item: MediaItem }) {
+export function ItemBookmarkButton(props: {
+  item: MediaItem;
+  className?: string;
+}) {
   const addMediaBookmark = useBookmarkStore((s) => s.addMediaBookmark);
   const removeBookmark = useBookmarkStore((s) => s.removeBookmark);
   const bookmarks = useBookmarkStore((s) => s.bookmarks);
@@ -56,7 +59,7 @@ export function ItemBookmarkButton(props: { item: MediaItem }) {
       onClick={toggleBookmark}
       icon={isBookmarked ? Icons.BOOKMARK : Icons.BOOKMARK_OUTLINE}
       iconSizeClass="text-base"
-      className="p-3 video-buttonBackground"
+      className={`p-3 video-buttonBackground ${props.className}`}
     />
   );
 }

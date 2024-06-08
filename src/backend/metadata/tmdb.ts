@@ -393,3 +393,16 @@ export async function getRecommendations(
 
   return sortedFinalList;
 }
+
+export async function getMediaTrailer(
+  id: string,
+  type: "movie" | "show",
+): Promise<string | undefined> {
+  const data = await get<any | TMDBShowData>(
+    `${type === "show" ? "tv" : "movie"}/${id}/videos`,
+  );
+  const trailer = data.results.find(
+    (v: { type: string }) => v.type === "Trailer",
+  );
+  return trailer?.key;
+}

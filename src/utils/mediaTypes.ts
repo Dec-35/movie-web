@@ -5,4 +5,5 @@ export interface MediaItem {
   release_date?: Date;
   poster?: string;
   type: "show" | "movie";
+  trailer?: string;
 }
