@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getRecommendations } from "@/backend/metadata/tmdb";
-import { Icons } from "@/components/Icon";
+import { Icon, Icons } from "@/components/Icon";
 import { SectionHeading } from "@/components/layout/SectionHeading";
 import { MediaGrid } from "@/components/media/MediaGrid";
 import { WatchedMediaCard } from "@/components/media/WatchedMediaCard";
@@ -46,6 +46,18 @@ export function RecommendedPart() {
     });
   }, [setItems, progressItems, bookmarkItems]);
 
+  const refreshRecommended = () => {
+    const button = document.getElementById("refresh");
+    button?.classList.remove("refresh-spin");
+    setTimeout(() => {
+      button?.classList.add("refresh-spin");
+    }, 100);
+    const allItems = [...progressItems, ...bookmarkItems];
+    getRecommendations(allItems).then((elements) => {
+      setItems(elements);
+    });
+  };
+
   return (
     <div>
       <SectionHeading
@@ -53,6 +65,14 @@ export function RecommendedPart() {
         icon={Icons.FILM}
       >
         {" "}
+        <button
+          className="ml-2 flex h-12 items-center overflow-hidden rounded-full bg-background-secondary px-4 py-2 text-white transition-[background-color,transform] hover:bg-background-secondaryHover active:scale-105"
+          type="button"
+          id="refresh"
+          onClick={refreshRecommended}
+        >
+          <Icon icon={Icons.REFRESH} />
+        </button>
       </SectionHeading>
       <MediaGrid ref={gridRef}>
         {items.map((v) => (

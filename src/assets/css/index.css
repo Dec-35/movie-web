@@ -376,3 +376,17 @@ input[type=range].styled-slider.slider-progress::-ms-fill-lower {
   position: relative;
   opacity: 1;
 }
+
+.refresh-spin {
+  animation: spin 1s ease-out forwards;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
