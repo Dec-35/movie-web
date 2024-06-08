@@ -58,6 +58,8 @@ export function RecommendedPart() {
     });
   };
 
+  if (items.length === 0) return null;
+
   return (
     <div>
       <SectionHeading
