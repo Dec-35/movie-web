@@ -18,6 +18,7 @@ interface Props {
   disabled?: boolean;
   download?: string;
   loading?: boolean;
+  iconLeft?: boolean;
 }
 
 export function Button(props: Props) {
@@ -69,10 +70,16 @@ export function Button(props: Props) {
       )
       .join(" ");
 
+  if (props.iconLeft) classes += " flex-row-reverse";
+
   const content = (
     <>
       {props.icon && !props.loading ? (
-        <span className="mr-3 hidden md:inline-block">
+        <span
+          className={`${
+            props.iconLeft ? "ml-3" : "mr-3"
+          } hidden md:inline-block`}
+        >
           <Icon icon={props.icon} />
         </span>
       ) : null}

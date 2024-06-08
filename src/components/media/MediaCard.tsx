@@ -3,11 +3,17 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import { getMediaTrailer, mediaItemToId } from "@/backend/metadata/tmdb";
+import {
+  getMediaDetails,
+  getMediaTrailer,
+  mediaItemToId,
+} from "@/backend/metadata/tmdb";
+import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { DotList } from "@/components/text/DotList";
 import { Flare } from "@/components/utils/Flare";
 import { MediaItem } from "@/utils/mediaTypes";
 
+import { Button } from "../buttons/Button";
 import { IconPatch } from "../buttons/IconPatch";
 import { Icons } from "../Icon";
 import { BookmarkButton, ItemBookmarkButton } from "../player/Player";
@@ -69,9 +75,25 @@ function MediaCardContent({
   const [trailerLoaded, setTrailerLoaded] = useState(false);
 
   const handleMouseLeave = () => {
-    console.log("handleMouseLeave");
-    //  setActive(false);
+    // console.log("handleMouseLeave");
+    setActive(false);
+    setTrailerLoaded(false);
   };
+
+  // check if media has all its data. If not, fetch them from the API
+  useEffect(() => {
+    if (!media.vote_average || !media.overview) {
+      getMediaDetails(
+        media.id,
+        (media.type === "show" ? "tv" : "movie") as TMDBContentTypes,
+      ).then((details) => {
+        if (details) {
+          media.vote_average = details.vote_average;
+          media.overview = details.overview ?? "";
+        }
+      });
+    }
+  }, [media]);
 
   const handleClick = (e: React.MouseEvent) => {
     if (!active) {
@@ -193,7 +215,7 @@ function MediaCardContent({
           {trailerLoaded ? (
             <iframe
               className="mediaTrailer"
-              src={`https://www.youtube.com/embed/${media.trailer}`}
+              src={`https://www.youtube.com/embed/${media.trailer}?modestbranding=1&autohide=1&showinfo=0&controls=0&autoplay=1&cc_load_policy=1&iv_load_policy=3&rel=0&loop=0`}
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -202,7 +224,30 @@ function MediaCardContent({
             <div>Trailer not found</div>
           )}
         </div>
-        <ItemBookmarkButton className="bookmarkButton" item={media} />
+        <div className="mediaPreviewContent flex flex-col gap-2">
+          <span className="flex gap-3 items-end">
+            {" "}
+            <h1 className="text-white text-2xl font-bold">{media.title}</h1>
+            <DotList className="text-xs pb-1" content={dotListContent} />
+          </span>
+          <span className="flex gap-3 items-center justify-between">
+            <p className="media-desc text-secondary text-sm">
+              {media.overview}
+            </p>
+            <span>
+              <h3 className="vote_avergae-label">
+                {media.vote_average?.toFixed(1)}/10
+              </h3>
+              <Button
+                className="px-3 py-2 mt-2"
+                iconLeft
+                icon={Icons.ARROW_RIGHT}
+              >
+                {t("home.watch")}
+              </Button>
+            </span>
+          </span>
+        </div>
       </div>
     </div>
   );

@@ -6,4 +6,6 @@ export interface MediaItem {
   poster?: string;
   type: "show" | "movie";
   trailer?: string;
+  overview?: string;
+  vote_average?: number;
 }

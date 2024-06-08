@@ -98,6 +98,8 @@ export function formatTMDBMetaToMediaItem(media: TMDBMediaResult): MediaItem {
     release_date: media.original_release_date,
     poster: media.poster,
     type,
+    overview: media.overview,
+    vote_average: media.vote_average,
   };
 }
 
@@ -316,17 +318,20 @@ export function formatTMDBSearchResult(
       id: show.id,
       original_release_date: new Date(show.first_air_date),
       object_type: mediatype,
+      overview: show.overview,
+      vote_average: show.vote_average,
     };
   }
 
   const movie = result as TMDBMovieSearchResult;
-
   return {
     title: movie.title,
     poster: getMediaPoster(movie.poster_path),
     id: movie.id,
     original_release_date: new Date(movie.release_date),
     object_type: mediatype,
+    overview: movie.overview,
+    vote_average: movie.vote_average,
   };
 }
 
