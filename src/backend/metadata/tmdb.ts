@@ -344,9 +344,17 @@ export async function getTrendingMediaItems(
 export async function getRecommendations(
   userMedia: MediaItem[],
 ): Promise<MediaItem[]> {
-  const promises = userMedia.map((media) =>
+  // Shuffle the userMedia array to introduce randomness
+  const shuffledUserMedia = userMedia.sort(() => Math.random() - 0.5);
+
+  // Select a maximum of 10 unique items from the shuffled list
+  const uniqueItems = shuffledUserMedia.slice(0, 10);
+
+  // Fetch similar items for each selected unique item
+  const promises = uniqueItems.map((media) =>
     getRelated(media.id, mediaItemTypeToMediaType(media.type)),
   );
+
   const results = await Promise.all(promises);
 
   // Flatten the results into a single array
