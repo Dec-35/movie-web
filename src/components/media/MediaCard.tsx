@@ -15,7 +15,7 @@ import { MediaItem } from "@/utils/mediaTypes";
 
 import { Button } from "../buttons/Button";
 import { IconPatch } from "../buttons/IconPatch";
-import { Icons } from "../Icon";
+import { Icon, Icons } from "../Icon";
 import { BookmarkButton, ItemBookmarkButton } from "../player/Player";
 
 export interface MediaCardProps {
@@ -74,8 +74,9 @@ function MediaCardContent({
   const [active, setActive] = useState(false);
   const [trailerLoaded, setTrailerLoaded] = useState(false);
 
-  const handleMouseLeave = () => {
+  const handleClose = (e: React.MouseEvent) => {
     // console.log("handleMouseLeave");
+    e.preventDefault();
     setActive(false);
     setTrailerLoaded(false);
   };
@@ -110,7 +111,7 @@ function MediaCardContent({
   };
 
   return (
-    <div onMouseLeave={handleMouseLeave} onClick={handleClick}>
+    <div onClick={handleClick} className="media-group">
       <Flare.Base
         className={`group -m-3 mb-2 mediaCardElement rounded-xl bg-background-main transition-colors duration-100 focus:relative focus:z-10 ${
           canLink ? "hover:bg-mediaCard-hoverBackground tabbable" : ""
@@ -210,7 +211,12 @@ function MediaCardContent({
           <DotList className="text-xs" content={dotListContent} />
         </Flare.Child>
       </Flare.Base>
-      <div className={`mediaPreview ${active ? "active" : ""}`}>
+      <div className={`mediaPreview relative ${active ? "active" : ""}`}>
+        <div className="absolute top-5 right-5 z-10">
+          <button onClick={handleClose} type="button">
+            <Icon icon={Icons.X} />
+          </button>
+        </div>
         <div className="mediaTrailerContainer">
           {trailerLoaded ? (
             <iframe
@@ -230,7 +236,7 @@ function MediaCardContent({
             <h1 className="text-white text-2xl font-bold">{media.title}</h1>
             <DotList className="text-xs pb-1" content={dotListContent} />
           </span>
-          <span className="flex gap-3 items-center justify-between">
+          <span className="flex gap-3 media-desc-container items-center justify-between">
             <p className="media-desc text-secondary text-sm">
               {media.overview}
             </p>
