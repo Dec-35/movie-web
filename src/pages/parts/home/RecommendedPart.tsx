@@ -1,5 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getRecommendations } from "@/backend/metadata/tmdb";
@@ -14,6 +14,7 @@ import { MediaItem } from "@/utils/mediaTypes";
 export function RecommendedPart() {
   const [gridRef] = useAutoAnimate<HTMLDivElement>();
   const { t } = useTranslation();
+  const loaded = useRef<boolean>(false);
 
   const [items, setItems] = useState<MediaItem[]>([]);
   const progress = useProgressStore((s) => s.items);
@@ -39,12 +40,17 @@ export function RecommendedPart() {
     return output;
   }, [progress]);
 
-  useEffect(() => {
+  if (
+    progressItems.length !== 0 &&
+    bookmarkItems.length !== 0 &&
+    !loaded.current
+  ) {
+    loaded.current = true;
     const allItems = [...progressItems, ...bookmarkItems];
     getRecommendations(allItems).then((elements) => {
       setItems(elements);
     });
-  }, [setItems, progressItems, bookmarkItems]);
+  }
 
   const refreshRecommended = () => {
     const button = document.getElementById("refresh");
