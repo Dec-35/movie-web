@@ -449,3 +449,11 @@ input[type=range].styled-slider.slider-progress::-ms-fill-lower {
   }
 
 }
+
+.divider {
+  height: 0.12rem;
+  filter: brightness(1.5);
+  margin: 0.5rem 0;
+  background-color: rgb(var(--colors-background-secondary));
+  box-sizing: border-box;
+}

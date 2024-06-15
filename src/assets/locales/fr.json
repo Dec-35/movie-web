@@ -290,6 +290,9 @@
         "loadingTitle": "Chargement...",
         "unairedEpisodes": "Un ou plusieurs épisodes de cette saison ont été désactivés, car ils n'ont pas encore été diffusés."
       },
+      "seasons": {
+        "button": "Saisons"
+      },
       "playback": {
         "speedLabel": "Vitesse de lecture",
         "title": "Paramètres de lecture"

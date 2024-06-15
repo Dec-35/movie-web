@@ -32,6 +32,10 @@ export interface MediaCardProps {
   onClose?: () => void;
 }
 
+export interface LinkableMediaCardProps extends MediaCardProps {
+  link: string;
+}
+
 function checkReleased(media: MediaItem): boolean {
   const isReleasedYear = Boolean(
     media.year && media.year <= new Date().getFullYear(),
@@ -53,7 +57,8 @@ function MediaCardContent({
   percentage,
   closable,
   onClose,
-}: MediaCardProps) {
+  link,
+}: LinkableMediaCardProps) {
   const { t } = useTranslation();
   const percentageString = `${Math.round(percentage ?? 0).toFixed(0)}%`;
 
@@ -71,6 +76,17 @@ function MediaCardContent({
     dotListContent.push(t("media.unreleased"));
   }
 
+  if (media.adult) {
+    dotListContent.push("+18");
+  }
+
+  const showDotListContent = [
+    `${media.seasonsNb} ${t("player.menus.seasons.button")}`,
+  ];
+  showDotListContent.push(
+    `${media.episodesNb} ${t("player.menus.episodes.button")}`,
+  );
+
   const [active, setActive] = useState(false);
   const [trailerLoaded, setTrailerLoaded] = useState(false);
 
@@ -83,7 +99,13 @@ function MediaCardContent({
 
   // check if media has all its data. If not, fetch them from the API
   useEffect(() => {
-    if (!media.vote_average || !media.overview) {
+    if (
+      !media.vote_average ||
+      !media.overview ||
+      !media.adult ||
+      !media.episodesNb ||
+      !media.seasonsNb
+    ) {
       getMediaDetails(
         media.id,
         (media.type === "show" ? "tv" : "movie") as TMDBContentTypes,
@@ -91,6 +113,16 @@ function MediaCardContent({
         if (details) {
           media.vote_average = details.vote_average;
           media.overview = details.overview ?? "";
+          media.adult = details.adult;
+          if (media.type === "show") {
+            if (
+              "number_of_episodes" in details &&
+              "number_of_seasons" in details
+            ) {
+              media.episodesNb = details.number_of_episodes ?? 0;
+              media.seasonsNb = details.number_of_seasons ?? 0;
+            }
+          }
         }
       });
     }
@@ -100,6 +132,8 @@ function MediaCardContent({
     if (!active) {
       e.preventDefault();
       setActive(true);
+
+      console.log(media);
 
       getMediaTrailer(media.id, media.type).then((trailer) => {
         if (trailer) {
@@ -113,7 +147,7 @@ function MediaCardContent({
   return (
     <div onClick={handleClick} className="media-group">
       <Flare.Base
-        className={`group -m-3 mb-2 mediaCardElement rounded-xl bg-background-main transition-colors duration-100 focus:relative focus:z-10 ${
+        className={`group cursor-pointer -m-3 mb-2 mediaCardElement rounded-xl bg-background-main transition-colors duration-100 focus:relative focus:z-10 ${
           canLink ? "hover:bg-mediaCard-hoverBackground tabbable" : ""
         }${active ? " active" : ""}`}
         tabIndex={canLink ? 0 : -1}
@@ -231,11 +265,19 @@ function MediaCardContent({
           )}
         </div>
         <div className="mediaPreviewContent flex flex-col gap-2">
-          <span className="flex gap-3 items-end">
+          <span className="flex flex-wrap gap-3 items-end">
             {" "}
             <h1 className="text-white text-2xl font-bold">{media.title}</h1>
-            <DotList className="text-xs pb-1" content={dotListContent} />
+            <DotList
+              className="text-xs pb-1 mr-auto"
+              content={dotListContent}
+            />
+            {media.type === "show" ? (
+              <DotList className="text-xs pb-1" content={showDotListContent} />
+            ) : null}
+            <ItemBookmarkButton item={media} className="top-2 relative" />
           </span>
+          <div className="divider" />
           <span className="flex gap-3 media-desc-container items-center justify-between">
             <p className="media-desc text-secondary text-sm">
               {media.overview}
@@ -244,13 +286,15 @@ function MediaCardContent({
               <h3 className="vote_avergae-label">
                 {media.vote_average?.toFixed(1)}/10
               </h3>
-              <Button
-                className="px-3 py-2 mt-2"
-                iconLeft
-                icon={Icons.ARROW_RIGHT}
-              >
-                {t("home.watch")}
-              </Button>
+              <Link to={link} tabIndex={-1}>
+                <Button
+                  className="px-3 py-2 mt-2"
+                  iconLeft
+                  icon={Icons.ARROW_RIGHT}
+                >
+                  {t("home.watch")}
+                </Button>
+              </Link>
             </span>
           </span>
         </div>
@@ -260,8 +304,6 @@ function MediaCardContent({
 }
 
 export function MediaCard(props: MediaCardProps) {
-  const content = <MediaCardContent {...props} />;
-
   const isReleased = useCallback(
     () => checkReleased(props.media),
     [props.media],
@@ -282,20 +324,23 @@ export function MediaCard(props: MediaCardProps) {
     }
   }
 
+  const content = <MediaCardContent {...props} link={link} />;
+
   if (!canLink) return <span>{content}</span>;
   return (
     <div className="relative">
-      <Link
-        to={link}
-        tabIndex={-1}
+      <div
         className={classNames(
-          "tabbable media-card-link",
+          "tabbable media-card-link ",
           props.closable ? "hover:cursor-default" : "",
         )}
       >
         {content}
-      </Link>
-      <ItemBookmarkButton item={props.media} />
+      </div>
+      <ItemBookmarkButton
+        item={props.media}
+        className="video-buttonBackground "
+      />
     </div>
   );
 }
