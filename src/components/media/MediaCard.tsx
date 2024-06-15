@@ -275,7 +275,10 @@ function MediaCardContent({
             {media.type === "show" ? (
               <DotList className="text-xs pb-1" content={showDotListContent} />
             ) : null}
-            <ItemBookmarkButton item={media} className="top-2 relative" />
+            <ItemBookmarkButton
+              item={media}
+              className="ml-auto top-2 relative"
+            />
           </span>
           <div className="divider" />
           <span className="flex gap-3 media-desc-container items-center justify-between">
