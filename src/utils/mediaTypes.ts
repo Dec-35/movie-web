@@ -16,6 +16,7 @@ export interface Episode {
 }
 
 export interface MediaItem {
+  rating?: number;
   adult?: boolean;
   id: string;
   title: string;

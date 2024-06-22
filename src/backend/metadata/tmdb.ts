@@ -419,3 +419,8 @@ export async function getMediaTrailer(
   );
   return trailer?.key;
 }
+
+export async function getMediaRatings(id: string, type: "show"): Promise<any> {
+  const data = await get<any | TMDBShowData>(`tv/${id}/content_ratings`);
+  return data.results;
+}

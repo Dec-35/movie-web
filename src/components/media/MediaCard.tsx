@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 import {
   getMediaDetails,
+  getMediaRatings,
   getMediaTrailer,
   mediaItemToId,
 } from "@/backend/metadata/tmdb";
@@ -76,8 +77,8 @@ function MediaCardContent({
     dotListContent.push(t("media.unreleased"));
   }
 
-  if (media.adult) {
-    dotListContent.push("+18");
+  if (media.rating) {
+    dotListContent.push(`${media.rating}+`);
   }
 
   const showDotListContent = [
@@ -98,13 +99,11 @@ function MediaCardContent({
   };
 
   // check if media has all its data. If not, fetch them from the API
-  useEffect(() => {
+  function getDetails() {
     if (
       !media.vote_average ||
       !media.overview ||
-      !media.adult ||
-      !media.episodesNb ||
-      !media.seasonsNb
+      (media.type === "show" && (!media.episodesNb || !media.seasonsNb))
     ) {
       getMediaDetails(
         media.id,
@@ -113,7 +112,6 @@ function MediaCardContent({
         if (details) {
           media.vote_average = details.vote_average;
           media.overview = details.overview ?? "";
-          media.adult = details.adult;
           if (media.type === "show") {
             if (
               "number_of_episodes" in details &&
@@ -123,22 +121,41 @@ function MediaCardContent({
               media.seasonsNb = details.number_of_seasons ?? 0;
             }
           }
+          setActive(true);
+        } else {
+          console.error("could not fetch media details");
         }
       });
+    } else {
+      setActive(true);
     }
-  }, [media]);
+  }
 
   const handleClick = (e: React.MouseEvent) => {
     if (!active) {
       e.preventDefault();
-      setActive(true);
-
-      console.log(media);
-
       getMediaTrailer(media.id, media.type).then((trailer) => {
         if (trailer) {
           media.trailer = trailer;
           setTrailerLoaded(true);
+        }
+
+        if (media.type === "show")
+          getMediaRatings(media.id, media.type).then((ratings) => {
+            // get UK rating
+            if (ratings) {
+              media.rating = ratings.find(
+                (rating: { iso_3166_1: string }) => rating.iso_3166_1 === "GB",
+              )?.rating;
+            }
+            getDetails();
+          });
+        else {
+          // 18+ === media.adult?
+          if (media.adult) {
+            media.rating = 18;
+          }
+          getDetails();
         }
       });
     }
@@ -261,7 +278,9 @@ function MediaCardContent({
               allowFullScreen
             />
           ) : (
-            <div>Trailer not found</div>
+            <div className="flex justify-center items-center w-full h-full bg-slate-950">
+              No trailer found. Check on YouTube.
+            </div>
           )}
         </div>
         <div className="mediaPreviewContent flex flex-col gap-2">
@@ -277,7 +296,7 @@ function MediaCardContent({
             ) : null}
             <ItemBookmarkButton
               item={media}
-              className="ml-auto top-2 relative"
+              className="ml-auto md:ml-0 top-2 relative"
             />
           </span>
           <div className="divider" />
