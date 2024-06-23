@@ -263,7 +263,7 @@ function MediaCardContent({
         </Flare.Child>
       </Flare.Base>
       <div className={`mediaPreview relative ${active ? "active" : ""}`}>
-        <div className="absolute top-5 right-5 z-10">
+        <div className="fixed top-5 right-5 z-10">
           <button onClick={handleClose} type="button">
             <Icon icon={Icons.X} />
           </button>
