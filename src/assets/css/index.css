@@ -353,6 +353,7 @@ input[type=range].styled-slider.slider-progress::-ms-fill-lower {
   opacity: 0;
   overflow-y: auto;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  overscroll-behavior: none;
 }
 
 .mediaPreview.active {

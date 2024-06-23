@@ -161,6 +161,15 @@ function MediaCardContent({
     }
   };
 
+  // watch active for scroll
+  useEffect(() => {
+    if (active) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [active]);
+
   return (
     <div onClick={handleClick} className="media-group">
       <Flare.Base
