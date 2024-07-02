@@ -17,6 +17,7 @@ import { MediaItem } from "@/utils/mediaTypes";
 import { Button } from "../buttons/Button";
 import { IconPatch } from "../buttons/IconPatch";
 import { Icon, Icons } from "../Icon";
+import { Loading } from "../layout/Loading";
 import { BookmarkButton, ItemBookmarkButton } from "../player/Player";
 
 export interface MediaCardProps {
@@ -89,10 +90,12 @@ function MediaCardContent({
   );
 
   const [active, setActive] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [trailerLoaded, setTrailerLoaded] = useState(false);
 
   const handleClose = (e: React.MouseEvent) => {
     // console.log("handleMouseLeave");
+    setLoading(false);
     e.preventDefault();
     setActive(false);
     setTrailerLoaded(false);
@@ -132,6 +135,7 @@ function MediaCardContent({
   }
 
   const handleClick = (e: React.MouseEvent) => {
+    setLoading(true);
     if (!active) {
       e.preventDefault();
       getMediaTrailer(media.id, media.type).then((trailer) => {
@@ -170,9 +174,16 @@ function MediaCardContent({
     }
   }, [active]);
 
+  const handleOustideClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      handleClose(e);
+    }
+  };
+
   return (
-    <div onClick={handleClick} className="media-group">
+    <div className="media-group">
       <Flare.Base
+        onClick={handleClick}
         className={`group cursor-pointer -m-3 mb-2 mediaCardElement rounded-xl bg-background-main transition-colors duration-100 focus:relative focus:z-10 ${
           canLink ? "hover:bg-mediaCard-hoverBackground tabbable" : ""
         }${active ? " active" : ""}`}
@@ -271,64 +282,76 @@ function MediaCardContent({
           <DotList className="text-xs" content={dotListContent} />
         </Flare.Child>
       </Flare.Base>
-      <div className={`mediaPreview relative ${active ? "active" : ""}`}>
-        <div className="fixed top-5 right-5 z-10">
-          <button onClick={handleClose} type="button">
-            <Icon icon={Icons.X} />
-          </button>
-        </div>
-        <div className="mediaTrailerContainer">
-          {trailerLoaded ? (
-            <iframe
-              className="mediaTrailer"
-              src={`https://www.youtube.com/embed/${media.trailer}?modestbranding=1&autohide=1&showinfo=0&controls=0&autoplay=1&cc_load_policy=1&iv_load_policy=3&rel=0&loop=0`}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          ) : (
-            <div className="flex justify-center items-center w-full h-full bg-slate-950">
-              No trailer found. Check on YouTube.
+      <div
+        onClick={handleOustideClick}
+        className={`outClickHitbox ${loading ? "active" : ""}`}
+      >
+        {!active ? (
+          <Loading className="centered" />
+        ) : (
+          <div className={`mediaPreview relative ${active ? "active" : ""}`}>
+            <div className="fixed top-5 right-5 z-10">
+              <button onClick={handleClose} type="button">
+                <Icon icon={Icons.X} />
+              </button>
             </div>
-          )}
-        </div>
-        <div className="mediaPreviewContent flex flex-col gap-2">
-          <span className="flex flex-wrap gap-3 items-end">
-            {" "}
-            <h1 className="text-white text-2xl font-bold">{media.title}</h1>
-            <DotList
-              className="text-xs pb-1 mr-auto"
-              content={dotListContent}
-            />
-            {media.type === "show" ? (
-              <DotList className="text-xs pb-1" content={showDotListContent} />
-            ) : null}
-            <ItemBookmarkButton
-              item={media}
-              className="ml-auto md:ml-0 top-2 relative"
-            />
-          </span>
-          <div className="divider" />
-          <span className="flex gap-3 media-desc-container items-center justify-between">
-            <p className="media-desc text-secondary text-sm">
-              {media.overview}
-            </p>
-            <span>
-              <h3 className="vote_avergae-label">
-                {media.vote_average?.toFixed(1)}/10
-              </h3>
-              <Link to={link} tabIndex={-1}>
-                <Button
-                  className="px-3 py-2 mt-2"
-                  iconLeft
-                  icon={Icons.ARROW_RIGHT}
-                >
-                  {t("home.watch")}
-                </Button>
-              </Link>
-            </span>
-          </span>
-        </div>
+            <div className="mediaTrailerContainer">
+              {trailerLoaded ? (
+                <iframe
+                  className="mediaTrailer"
+                  src={`https://www.youtube.com/embed/${media.trailer}?modestbranding=1&autohide=1&showinfo=0&controls=0&autoplay=1&cc_load_policy=1&iv_load_policy=3&rel=0&loop=0`}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <div className="flex justify-center items-center w-full h-full bg-slate-950">
+                  No trailer found. Check on YouTube.
+                </div>
+              )}
+            </div>
+            <div className="mediaPreviewContent flex flex-col gap-2">
+              <span className="flex flex-wrap gap-3 items-end">
+                {" "}
+                <h1 className="text-white text-2xl font-bold">{media.title}</h1>
+                <DotList
+                  className="text-xs pb-1 mr-auto"
+                  content={dotListContent}
+                />
+                {media.type === "show" ? (
+                  <DotList
+                    className="text-xs pb-1"
+                    content={showDotListContent}
+                  />
+                ) : null}
+                <ItemBookmarkButton
+                  item={media}
+                  className="ml-auto md:ml-0 top-2 relative"
+                />
+              </span>
+              <div className="divider" />
+              <span className="flex gap-3 media-desc-container items-center justify-between">
+                <p className="media-desc text-secondary text-sm">
+                  {media.overview}
+                </p>
+                <span>
+                  <h3 className="vote_avergae-label">
+                    {media.vote_average?.toFixed(1)}/10
+                  </h3>
+                  <Link to={link} tabIndex={-1}>
+                    <Button
+                      className="px-3 py-2 mt-2"
+                      iconLeft
+                      icon={Icons.ARROW_RIGHT}
+                    >
+                      {t("home.watch")}
+                    </Button>
+                  </Link>
+                </span>
+              </span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

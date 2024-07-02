@@ -338,28 +338,62 @@ input[type=range].styled-slider.slider-progress::-ms-fill-lower {
 
 .mediaPreview {
   display: none;
-
   width: 80vw;
   height: fit-content;
   max-width: 1000px;
   max-height: 80vh;
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.5);
   z-index: 1000;
   background-color: rgb(var(--colors-background-secondary));
   border-radius: 14px;
-  opacity: 0;
+  opacity: 1;
   overflow-y: auto;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.outClickHitbox {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  display: none;
+  opacity: 0;
   overscroll-behavior: none;
 }
 
-.mediaPreview.active {
-  display: block;
-  animation: appear 0.15s ease-out forwards;
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
+}
+
+.outClickHitbox.active {
+  display: block;
+  animation: fadeIn 0.3s ease-out forwards;
+  background: #00000080;
+  backdrop-filter: blur(5px);
+
+}
+
+.outClickHitbox.active .mediaPreview.active {
+  display: block;
+  animation: appear 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes appear {
