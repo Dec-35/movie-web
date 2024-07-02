@@ -275,8 +275,8 @@ function MediaCardContent({
             </div>
           </div>
           <div>
-            <h1 className="mb-1 line-clamp-3 max-h-[4.5rem] text-ellipsis break-words font-bold text-white">
-              <span>{media.title}</span>
+            <h1 className="mb-1 overflow-hidden max-h-[4.5rem] whitespace-nowrap text-ellipsis break-words font-bold text-white">
+              {media.title}
             </h1>
           </div>
           <DotList className="text-xs" content={dotListContent} />
@@ -313,7 +313,9 @@ function MediaCardContent({
             <div className="mediaPreviewContent flex flex-col gap-2">
               <span className="flex flex-wrap gap-3 items-end">
                 {" "}
-                <h1 className="text-white text-2xl font-bold">{media.title}</h1>
+                <h1 className="text-white text-2xl font-bold w-100 text-wrap">
+                  {media.title}
+                </h1>
                 <DotList
                   className="text-xs pb-1 mr-auto"
                   content={dotListContent}
