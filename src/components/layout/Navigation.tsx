@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 import { NoUserAvatar, UserAvatar } from "@/components/Avatar";
 import { IconPatch } from "@/components/buttons/IconPatch";
-import { Icons } from "@/components/Icon";
-import { LinksDropdown } from "@/components/LinksDropdown";
+import { Icon, Icons } from "@/components/Icon";
+import { GoToLink, LinksDropdown } from "@/components/LinksDropdown";
 import { Lightbar } from "@/components/utils/Lightbar";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { BlurEllipsis } from "@/pages/layouts/SubPageLayout";
@@ -96,9 +96,14 @@ export function Navigation(props: NavigationProps) {
                   <IconPatch icon={Icons.USER} clickable downsized />
                 </Link>
               </div>
-              <LinksDropdown>
-                {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}
-              </LinksDropdown>
+              <div className="text-xl text-white tabbable rounded-full ml-1.5">
+                <Link
+                  to="/settings"
+                  className="text-white tabbable rounded-full"
+                >
+                  <IconPatch icon={Icons.SETTINGS} clickable downsized />
+                </Link>
+              </div>
             </div>
           </div>
         </div>

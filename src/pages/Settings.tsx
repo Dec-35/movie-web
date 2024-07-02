@@ -44,13 +44,7 @@ function SettingsLayout(props: { children: React.ReactNode }) {
 
   return (
     <WideContainer ultraWide classNames="overflow-visible">
-      <div
-        className={classNames(
-          "grid gap-12",
-          isMobile ? "grid-cols-1" : "lg:grid-cols-[280px,1fr]",
-        )}
-      >
-        <SidebarPart />
+      <div className="lg:mx-auto">
         <div>{props.children}</div>
       </div>
     </WideContainer>
@@ -247,33 +241,7 @@ export function SettingsPage() {
     <SubPageLayout>
       <PageTitle subpage k="global.pages.settings" />
       <SettingsLayout>
-        <div id="settings-account">
-          <Heading1 border className="!mb-0">
-            {t("settings.account.title")}
-          </Heading1>
-          {user.account && state.profile.state ? (
-            <AccountSettings
-              account={user.account}
-              deviceName={state.deviceName.state}
-              setDeviceName={state.deviceName.set}
-              colorA={state.profile.state.colorA}
-              setColorA={(v) => {
-                state.profile.set((s) => (s ? { ...s, colorA: v } : undefined));
-              }}
-              colorB={state.profile.state.colorB}
-              setColorB={(v) =>
-                state.profile.set((s) => (s ? { ...s, colorB: v } : undefined))
-              }
-              userIcon={state.profile.state.icon as any}
-              setUserIcon={(v) =>
-                state.profile.set((s) => (s ? { ...s, icon: v } : undefined))
-              }
-            />
-          ) : (
-            <RegisterCalloutPart />
-          )}
-        </div>
-        <div id="settings-preferences" className="mt-48">
+        <div id="settings-preferences">
           <PreferencesPart
             language={state.appLanguage.state}
             setLanguage={state.appLanguage.set}
@@ -306,8 +274,6 @@ export function SettingsPage() {
         </div>
         <div id="settings-connection" className="mt-48">
           <ConnectionsPart
-            backendUrl={state.backendUrl.state}
-            setBackendUrl={state.backendUrl.set}
             proxyUrls={state.proxyUrls.state}
             setProxyUrls={state.proxyUrls.set}
           />
