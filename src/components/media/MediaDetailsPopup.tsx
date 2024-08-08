@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import { Suspense, useCallback, useMemo, useState } from "react";
+import { MouseEvent, Suspense, useCallback, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import {
@@ -18,9 +18,19 @@ import { VideoPlayerButton } from "../player/internals/Button";
 import { ItemBookmarkButton } from "../player/Player";
 import { DotList } from "../text/DotList";
 
-function handleShare(props: any) {
+function handleShare(target: EventTarget & HTMLButtonElement, props: any) {
   const url = `${window.location.hostname}:${window.location.port}/#/media/details/${props.type}-${props.mediaId}`;
   navigator.clipboard.writeText(url);
+
+  // show copied to clipboard under the share button
+  const button = target;
+  const toast = document.createElement("div");
+  toast.classList.add("toast");
+  toast.textContent = t("actions.copied");
+  button.appendChild(toast);
+  setTimeout(() => {
+    toast.remove();
+  }, 2000);
 }
 
 function checkReleased(media: MediaItem): boolean {
@@ -205,7 +215,7 @@ export function MediaDetailsPopup(props: {
                 />
               ) : null}
               <VideoPlayerButton
-                onClick={() => handleShare(props)}
+                onClick={(e) => handleShare(e.currentTarget, props)}
                 icon={Icons.SHARE}
                 className="top-1 relative"
               />

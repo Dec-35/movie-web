@@ -518,3 +518,16 @@ input[type=range].styled-slider.slider-progress::-ms-fill-lower {
     transform: translateX(-100%);
   }
 } */
+
+button .toast {
+  position: absolute;
+  top: 0;
+  right: 50%;
+  transform: translate(50%, -120%);
+  z-index: 1000;
+  color: rgb(0, 253, 0);
+  background-color: rgb(var(--colors-background-main) / var(--tw-bg-opacity));
+  border-radius: 0.5rem;
+  opacity: 0.85;
+  padding: 0.3rem 0.6rem;
+}
