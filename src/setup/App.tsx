@@ -3,6 +3,7 @@ import { lazyWithPreload } from "react-lazy-with-preload";
 import {
   Navigate,
   Route,
+  Router,
   Routes,
   useLocation,
   useNavigate,
@@ -10,7 +11,13 @@ import {
 } from "react-router-dom";
 
 import { convertLegacyUrl, isLegacyUrl } from "@/backend/metadata/getmeta";
-import { generateQuickSearchMediaUrl } from "@/backend/metadata/tmdb";
+import {
+  generateQuickSearchMediaUrl,
+  getMediaDetails,
+} from "@/backend/metadata/tmdb";
+import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
+import { Loading } from "@/components/layout/Loading";
+import { MediaDetailsPopup } from "@/components/media/MediaDetailsPopup";
 import { useOnlineListener } from "@/hooks/usePing";
 import { AboutPage } from "@/pages/About";
 import { AccountChoice } from "@/pages/AccountChoice";
@@ -27,6 +34,7 @@ import { RegisterPage } from "@/pages/Register";
 import { Layout } from "@/setup/Layout";
 import { useHistoryListener } from "@/stores/history";
 import { LanguageProvider } from "@/stores/language";
+import { MediaItem } from "@/utils/mediaTypes";
 
 const DeveloperPage = lazy(() => import("@/pages/DeveloperPage"));
 const TestView = lazy(() => import("@/pages/developer/TestView"));
@@ -67,6 +75,30 @@ function QuickSearch() {
   }, [query, navigate]);
 
   return null;
+}
+
+function Home() {
+  const isOverlay = useLocation().pathname.includes("media/details");
+  const path = useLocation().pathname;
+  let mediaType: TMDBContentTypes;
+  let mediaId: string;
+
+  if (isOverlay) {
+    const mediaString = path.split("/")[path.indexOf("media/details") + 2];
+    mediaType = mediaString.split("-")[0] as TMDBContentTypes;
+    mediaId = mediaString.split("-")[1];
+  }
+
+  return (
+    <>
+      <HomePage />
+      {isOverlay && (
+        <Suspense fallback={<Loading />}>
+          <MediaDetailsPopup show url type={mediaType!} mediaId={mediaId!} />
+        </Suspense>
+      )}
+    </>
+  );
 }
 
 function QueryView() {
@@ -118,9 +150,11 @@ function App() {
             </LegacyUrlView>
           }
         />
-        <Route path="/browse/:query?" element={<HomePage />} />
+        <Route path="/browse/:query?" element={<Home />} />
+        <Route path="/media/details/:mediaId" element={<Home />} />
+
         <Route path="/accountChoice" element={<AccountChoice />} />
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<Home />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/about" element={<AboutPage />} />

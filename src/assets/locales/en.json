@@ -105,6 +105,7 @@
     }
   },
   "home": {
+    "share": "Share",
     "bookmarks": {
       "sectionTitle": "Bookmarks"
     },
