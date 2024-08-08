@@ -468,7 +468,7 @@ input[type=range].styled-slider.slider-progress::-ms-fill-lower {
 
 @media screen and (max-width: 768px) {
   .mediaPreview {
-    width: 90vw;
+    width: 94vw;
   }
 
   .media-desc-container {
@@ -488,6 +488,10 @@ input[type=range].styled-slider.slider-progress::-ms-fill-lower {
 
   .mediaTrailerContainer {
     aspect-ratio: 16/9;
+  }
+
+  .mediaPreviewContent {
+    padding: 1rem 1rem 2rem 1rem;
   }
 
 }

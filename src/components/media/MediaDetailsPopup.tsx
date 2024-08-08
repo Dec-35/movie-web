@@ -273,10 +273,10 @@ export function MediaDetailsPopup(props: {
               </span>
             </span>
           </div>
-          <div className="bg-main px-8">
-            <h4 className="text-lg py-4 font-semibold">Related</h4>
+          <div className="bg-main px-4 md:px-8">
+            <h4 className="text-xl pb-0 md:pb-4 py-4 font-semibold">Related</h4>
             <div
-              className="recommendations px-6 py-2"
+              className="recommendations px-0 md:px-6 py-2"
               onClick={() => handleClose(true)}
             >
               <MediaGrid ref={gridRef}>
