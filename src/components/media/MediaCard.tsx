@@ -219,6 +219,7 @@ export function MediaCard(props: MediaCardProps) {
             (props.media.type === "show" ? "tv" : "movie") as TMDBContentTypes
           }
           mediaId={props.media.id}
+          series={props.series}
         />
       ) : null}
     </>

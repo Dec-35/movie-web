@@ -57,6 +57,12 @@ export function MediaDetailsPopup(props: {
   close?: (value: boolean) => void;
   type: TMDBContentTypes;
   mediaId: string;
+  series?: {
+    episode: number;
+    season?: number;
+    episodeId: string;
+    seasonId: string;
+  };
 }) {
   const navigate = useNavigate();
   const mediaType = props.type === "tv" ? "show" : "movie";
@@ -118,7 +124,16 @@ export function MediaDetailsPopup(props: {
     `${media.episodesNb} ${t("player.menus.episodes.button")}`,
   );
 
-  const link = `/media/${encodeURIComponent(mediaItemToId(media))}`;
+  let link = `/media/${encodeURIComponent(mediaItemToId(media))}`;
+  if (props.series) {
+    if (props.series.season === 0 && !props.series.episodeId) {
+      link += `/${encodeURIComponent(props.series.seasonId)}`;
+    } else {
+      link += `/${encodeURIComponent(
+        props.series.seasonId,
+      )}/${encodeURIComponent(props.series.episodeId)}`;
+    }
+  }
 
   function getDetails() {
     if (
