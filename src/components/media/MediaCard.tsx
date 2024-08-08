@@ -1,7 +1,7 @@
 import classNames from "classnames";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { mediaItemToId } from "@/backend/metadata/tmdb";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
@@ -26,6 +26,7 @@ export interface MediaCardProps {
   percentage?: number;
   closable?: boolean;
   onClose?: () => void;
+  childLink?: boolean;
 }
 
 function checkReleased(media: MediaItem): boolean {
@@ -49,6 +50,7 @@ function MediaCardContent({
   percentage,
   closable,
   onClose,
+  childLink,
 }: MediaCardProps) {
   const { t } = useTranslation();
   const percentageString = `${Math.round(percentage ?? 0).toFixed(0)}%`;
@@ -63,6 +65,9 @@ function MediaCardContent({
     dotListContent.push(media.year.toFixed());
   }
 
+  if (childLink) {
+    // eh
+  }
   if (!isReleased()) {
     dotListContent.push(t("media.unreleased"));
   }
@@ -175,22 +180,27 @@ function MediaCardContent({
 export function MediaCard(props: MediaCardProps) {
   const content = <MediaCardContent {...props} />;
   const [popup, setPopup] = useState(false);
+  const navigate = useNavigate();
 
-  function handlePopupClose() {
-    setPopup(false);
+  function handleClick() {
+    if (props.childLink) {
+      navigate(
+        `/media/details/${props.media.type === "show" ? "tv" : "movie"}-${
+          props.media.id
+        }`,
+        { replace: false },
+      );
+    } else {
+      setPopup(true);
+    }
   }
-
-  const isReleased = useCallback(
-    () => checkReleased(props.media),
-    [props.media],
-  );
 
   return (
     <>
       <div className="relative">
         <div
           tabIndex={-1}
-          onClick={() => setPopup(true)} // Fix: Wrap setPopup(true) in an arrow function
+          onClick={() => handleClick()} // Fix: Wrap setPopup(true) in an arrow function
           className={classNames(
             "tabbable cursor-pointer",
             props.closable ? "hover:cursor-default" : "",
@@ -199,16 +209,18 @@ export function MediaCard(props: MediaCardProps) {
           {content}
         </div>
       </div>
-      <MediaDetailsPopup
-        show={popup}
-        url={false}
-        close={setPopup}
-        // media={props.media}
-        type={
-          (props.media.type === "show" ? "tv" : "movie") as TMDBContentTypes
-        }
-        mediaId={props.media.id}
-      />
+      {!props.childLink ? (
+        <MediaDetailsPopup
+          show={popup}
+          url={false}
+          close={setPopup}
+          // media={props.media}
+          type={
+            (props.media.type === "show" ? "tv" : "movie") as TMDBContentTypes
+          }
+          mediaId={props.media.id}
+        />
+      ) : null}
     </>
   );
 }

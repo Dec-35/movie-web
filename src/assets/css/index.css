@@ -350,7 +350,6 @@ input[type=range].styled-slider.slider-progress::-ms-fill-lower {
   height: fit-content;
   max-width: 1000px;
   max-height: 80vh;
-  min-height: 20vh;
   position: fixed;
   top: 50%;
   left: 50%;

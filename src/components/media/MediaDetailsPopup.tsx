@@ -1,3 +1,4 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { t } from "i18next";
 import { MouseEvent, Suspense, useCallback, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,11 +7,14 @@ import {
   getMediaDetails,
   getMediaRatings,
   getMediaTrailer,
+  getRecommendations,
   mediaItemToId,
 } from "@/backend/metadata/tmdb";
 import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { MediaItem } from "@/utils/mediaTypes";
 
+import { MediaGrid } from "./MediaGrid";
+import { WatchedMediaCard } from "./WatchedMediaCard";
 import { Button } from "../buttons/Button";
 import { Icon, Icons } from "../Icon";
 import { Loading } from "../layout/Loading";
@@ -80,14 +84,16 @@ export function MediaDetailsPopup(props: {
   const isReleased = useCallback(() => checkReleased(media), [media]);
   const [trailerLoaded, setTrailerLoaded] = useState(false);
   const [mediaLoaded, setMediaLoaded] = useState(false);
+  const [gridRef] = useAutoAnimate<HTMLDivElement>();
+  const [recommendedItems, setRecommendedItems] = useState<MediaItem[]>([]);
 
   if (!props.show) {
     return null;
   }
 
-  function handleClose() {
+  function handleClose(toChild: boolean = false) {
     document.body.style.overflow = "";
-    if (props.url) navigate("/", { replace: true });
+    if (props.url && !toChild) navigate("/", { replace: true });
     else if (props.close) props.close(false);
   }
 
@@ -157,7 +163,12 @@ export function MediaDetailsPopup(props: {
         } else {
           console.error("could not fetch media details");
         }
-        setMediaLoaded(true);
+
+        getRecommendations([media]).then((elements) => {
+          setRecommendedItems(elements);
+
+          setMediaLoaded(true);
+        });
       });
     } else {
       setMediaLoaded(true);
@@ -193,10 +204,10 @@ export function MediaDetailsPopup(props: {
         if (e.target === e.currentTarget) handleClose();
       }}
     >
-      {mediaLoaded && trailerLoaded ? (
-        <div className="mediaPreview relative">
+      {mediaLoaded ? (
+        <div className="mediaPreview">
           <div className="fixed top-5 right-5 z-10">
-            <button onClick={handleClose} type="button">
+            <button onClick={() => handleClose()} type="button">
               <Icon icon={Icons.X} />
             </button>
           </div>
@@ -261,6 +272,19 @@ export function MediaDetailsPopup(props: {
                 </Link>
               </span>
             </span>
+          </div>
+          <div className="bg-main px-8">
+            <h4 className="text-lg py-4 font-semibold">Related</h4>
+            <div
+              className="recommendations px-6 py-2"
+              onClick={() => handleClose(true)}
+            >
+              <MediaGrid ref={gridRef}>
+                {recommendedItems.map((v) => (
+                  <WatchedMediaCard key={v.id} media={v} childMedia />
+                ))}
+              </MediaGrid>
+            </div>
           </div>
         </div>
       ) : (

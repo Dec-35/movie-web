@@ -84,7 +84,7 @@ function Home() {
   let mediaId: string;
 
   if (isOverlay) {
-    const mediaString = path.split("/")[path.indexOf("media/details") + 2];
+    const mediaString = path.split("/")[path.split("/").indexOf("details") + 1];
     mediaType = mediaString.split("-")[0] as TMDBContentTypes;
     mediaId = mediaString.split("-")[1];
   }
