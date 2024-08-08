@@ -20,10 +20,18 @@ export function TrendingPart() {
     getTrendingMediaItems(period).then((elements) => {
       setItems(elements);
     });
+
+    document
+      .querySelector(".trending-section .horizontal-scroll-container")
+      ?.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
   }, [period]);
 
   return (
-    <div>
+    <div className="trending-section">
       <SectionHeading
         title={t("home.trending.sectionTitle")}
         icon={Icons.CLOCK}

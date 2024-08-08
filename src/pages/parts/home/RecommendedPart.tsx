@@ -62,12 +62,20 @@ export function RecommendedPart() {
     getRecommendations(allItems).then((elements) => {
       setItems(elements);
     });
+
+    document
+      .querySelector(".recommended-section .horizontal-scroll-container")
+      ?.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
   };
 
   if (items.length === 0) return null;
 
   return (
-    <div>
+    <div className="recommended-section">
       <SectionHeading
         title={t("home.recommended.sectionTitle")}
         icon={Icons.FILM}
