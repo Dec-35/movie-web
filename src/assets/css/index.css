@@ -531,3 +531,8 @@ button .toast {
   opacity: 0.85;
   padding: 0.3rem 0.6rem;
 }
+
+.media-title {
+  max-width: 80%;
+  text-wrap: wrap;
+}

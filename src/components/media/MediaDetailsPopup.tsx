@@ -19,7 +19,7 @@ import { ItemBookmarkButton } from "../player/Player";
 import { DotList } from "../text/DotList";
 
 function handleShare(target: EventTarget & HTMLButtonElement, props: any) {
-  const url = `${window.location.hostname}:${window.location.port}/#/media/details/${props.type}-${props.mediaId}`;
+  const url = `${window.location.hostname}/#/media/details/${props.type}-${props.mediaId}`;
   navigator.clipboard.writeText(url);
 
   // show copied to clipboard under the share button
@@ -60,7 +60,7 @@ export function MediaDetailsPopup(props: {
   const media: MediaItem = useMemo(
     () => ({
       rating: 0,
-      adult: true,
+      adult: false,
       id: props.mediaId,
       title: "",
       year: 0,
@@ -132,6 +132,27 @@ export function MediaDetailsPopup(props: {
               media.episodesNb = details.number_of_episodes ?? 0;
               media.seasonsNb = details.number_of_seasons ?? 0;
             }
+
+            if ("first_air_date" in details) {
+              media.year = new Date(details.first_air_date).getFullYear();
+            }
+            if ("name" in details) {
+              media.title = details.name;
+            }
+          } else {
+            if ("release_date" in details) {
+              media.year = new Date(details.release_date).getFullYear();
+            }
+            if ("title" in details) {
+              media.title = details.title;
+            }
+            if ("adult" in details) {
+              media.adult = details.adult;
+            }
+
+            if (media.adult) {
+              media.rating = 18;
+            }
           }
         } else {
           console.error("could not fetch media details");
@@ -160,10 +181,6 @@ export function MediaDetailsPopup(props: {
         getDetails();
       });
     else {
-      // 18+ === media.adult?
-      if (media.adult) {
-        media.rating = 18;
-      }
       getDetails();
     }
   });
@@ -201,7 +218,7 @@ export function MediaDetailsPopup(props: {
           <div className="mediaPreviewContent flex flex-col gap-2">
             <span className="flex flex-wrap gap-3 items-end">
               {" "}
-              <h1 className="text-white text-2xl font-bold w-100 text-wrap">
+              <h1 className="text-white media-title text-2xl font-bold w-100 text-wrap">
                 {media.title}
               </h1>
               <DotList
