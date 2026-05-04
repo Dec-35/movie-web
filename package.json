@@ -128,7 +128,7 @@
     "vite-plugin-package-version": "^1.1.0",
     "vite-plugin-pwa": "^0.17.4",
     "vite-plugin-static-copy": "^1.0.0",
-    "vitest": "^1.1.0",
+    "vitest": "^1.6.1",
     "workbox-window": "^7.0.0"
   },
   "pnpm": {
@@ -137,7 +137,8 @@
       "postcss@<8.4.31": ">=8.4.31",
       "@babel/traverse@<7.23.2": ">=7.23.2",
       "crypto-js@<4.2.0": ">=4.2.0",
-      "rollup": "npm:@rollup/wasm-node"
+      "rollup": "npm:@rollup/wasm-node",
+      "form-data@<4.0.4": ">=4.0.4"
     }
   }
 }
