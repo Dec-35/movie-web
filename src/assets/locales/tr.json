@@ -92,7 +92,8 @@
     "tagline": "Bu açık kaynaklı akış uygulamasıyla en sevdiğiniz dizileri ve filmleri izleyin."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "Hakkında",
       "dmca": "DMCA",
@@ -138,15 +139,11 @@
       },
       "morning": {
         "default": "Bu sabah ne izlemek istersiniz?",
-        "extra": [
-          "Before Sunrise'a iyi diyorlar"
-        ]
+        "extra": ["Before Sunrise'a iyi diyorlar"]
       },
       "night": {
         "default": "Bu akşam ne izlemek istersiniz?",
-        "extra": [
-          "Yoruldun mu? The Exorcist'e iyi diyorlar."
-        ]
+        "extra": ["Yoruldun mu? The Exorcist'e iyi diyorlar."]
       }
     }
   },

@@ -92,7 +92,8 @@
     "tagline": "Sledujte své oblíbené pořady a filmy s touto aplikací pro streamování s otevřeným zdrojovým kódem."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "O nás",
       "dmca": "DMCA",
@@ -132,21 +133,15 @@
     "titles": {
       "day": {
         "default": "Na co byste se chtěli dnes odpoledne dívat?",
-        "extra": [
-          "Chceš zažít dobrodružství? Jurský Park je pro tebe."
-        ]
+        "extra": ["Chceš zažít dobrodružství? Jurský Park je pro tebe."]
       },
       "morning": {
         "default": "Na co byste se chtěli dnes ráno dívat?",
-        "extra": [
-          "Slyšel jsem, že Před úsvitem je super"
-        ]
+        "extra": ["Slyšel jsem, že Před úsvitem je super"]
       },
       "night": {
         "default": "Na co byste se chtěli dnes večer dívat?",
-        "extra": [
-          "Unaven? Slyšel jsem, že Vymítač ďábla je super."
-        ]
+        "extra": ["Unaven? Slyšel jsem, že Vymítač ďábla je super."]
       }
     }
   },

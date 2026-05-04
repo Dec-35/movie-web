@@ -92,7 +92,8 @@
     "tagline": "Tonton serial televisi dan film favorit anda dengan aplikasi streaming sumber terbuka ini."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "Tentang",
       "dmca": "DMCA",
@@ -138,15 +139,11 @@
       },
       "morning": {
         "default": "Apa yang ingin Anda tonton pagi ini?",
-        "extra": [
-          "Saya dengar film Before Sunrise bagus"
-        ]
+        "extra": ["Saya dengar film Before Sunrise bagus"]
       },
       "night": {
         "default": "Apa yang ingin Anda tonton malam ini?",
-        "extra": [
-          "Capek? Saya dengar The Exocist bagus."
-        ]
+        "extra": ["Capek? Saya dengar The Exocist bagus."]
       }
     }
   },

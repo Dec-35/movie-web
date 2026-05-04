@@ -90,7 +90,8 @@
     "tagline": "Assista aos seus programas e filmes favoritos com esta aplicação de streaming de código aberto."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "Sobre",
       "dmca": "DMCA",

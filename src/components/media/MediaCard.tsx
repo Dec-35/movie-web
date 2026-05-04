@@ -1,15 +1,18 @@
 import classNames from "classnames";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { mediaItemToId } from "@/backend/metadata/tmdb";
+import { TMDBContentTypes } from "@/backend/metadata/types/tmdb";
 import { DotList } from "@/components/text/DotList";
 import { Flare } from "@/components/utils/Flare";
 import { MediaItem } from "@/utils/mediaTypes";
 
+import { MediaDetailsPopup } from "./MediaDetailsPopup";
 import { IconPatch } from "../buttons/IconPatch";
 import { Icons } from "../Icon";
+import { BookmarkButton, ItemBookmarkButton } from "../player/Player";
 
 export interface MediaCardProps {
   media: MediaItem;
@@ -23,6 +26,7 @@ export interface MediaCardProps {
   percentage?: number;
   closable?: boolean;
   onClose?: () => void;
+  childLink?: boolean;
 }
 
 function checkReleased(media: MediaItem): boolean {
@@ -46,6 +50,7 @@ function MediaCardContent({
   percentage,
   closable,
   onClose,
+  childLink,
 }: MediaCardProps) {
   const { t } = useTranslation();
   const percentageString = `${Math.round(percentage ?? 0).toFixed(0)}%`;
@@ -60,6 +65,9 @@ function MediaCardContent({
     dotListContent.push(media.year.toFixed());
   }
 
+  if (childLink) {
+    // eh
+  }
   if (!isReleased()) {
     dotListContent.push(t("media.unreleased"));
   }
@@ -81,7 +89,7 @@ function MediaCardContent({
         })}
       />
       <Flare.Child
-        className={`pointer-events-auto relative mb-2 p-3 transition-transform duration-100 ${
+        className={`pointer-events-auto media-card-link relative mb-2 p-3 transition-transform duration-100 ${
           canLink ? "group-hover:scale-95" : "opacity-60"
         }`}
       >
@@ -154,10 +162,16 @@ function MediaCardContent({
             />
           </div>
         </div>
-        <h1 className="mb-1 line-clamp-3 max-h-[4.5rem] text-ellipsis break-words font-bold text-white">
-          <span>{media.title}</span>
-        </h1>
+        <div>
+          <h1 className="mb-1 max-h-[4.5rem] overflow-hidden text-ellipsis break-words font-bold text-white">
+            {media.title}
+          </h1>
+        </div>
         <DotList className="text-xs" content={dotListContent} />
+        <ItemBookmarkButton
+          className="absolute video-buttonBackground right-0 bottom-0"
+          item={media}
+        />
       </Flare.Child>
     </Flare.Base>
   );
@@ -165,38 +179,49 @@ function MediaCardContent({
 
 export function MediaCard(props: MediaCardProps) {
   const content = <MediaCardContent {...props} />;
+  const [popup, setPopup] = useState(false);
+  const navigate = useNavigate();
 
-  const isReleased = useCallback(
-    () => checkReleased(props.media),
-    [props.media],
-  );
-
-  const canLink = props.linkable && !props.closable && isReleased();
-
-  let link = canLink
-    ? `/media/${encodeURIComponent(mediaItemToId(props.media))}`
-    : "#";
-  if (canLink && props.series) {
-    if (props.series.season === 0 && !props.series.episodeId) {
-      link += `/${encodeURIComponent(props.series.seasonId)}`;
+  function handleClick() {
+    if (props.childLink) {
+      navigate(
+        `/media/details/${props.media.type === "show" ? "tv" : "movie"}-${
+          props.media.id
+        }`,
+        { replace: false },
+      );
     } else {
-      link += `/${encodeURIComponent(
-        props.series.seasonId,
-      )}/${encodeURIComponent(props.series.episodeId)}`;
+      setPopup(true);
     }
   }
 
-  if (!canLink) return <span>{content}</span>;
   return (
-    <Link
-      to={link}
-      tabIndex={-1}
-      className={classNames(
-        "tabbable",
-        props.closable ? "hover:cursor-default" : "",
-      )}
-    >
-      {content}
-    </Link>
+    <>
+      <div className="relative">
+        <div
+          tabIndex={-1}
+          onClick={() => handleClick()} // Fix: Wrap setPopup(true) in an arrow function
+          className={classNames(
+            "tabbable cursor-pointer",
+            props.closable ? "hover:cursor-default" : "",
+          )}
+        >
+          {content}
+        </div>
+      </div>
+      {!props.childLink ? (
+        <MediaDetailsPopup
+          show={popup}
+          url={false}
+          close={setPopup}
+          // media={props.media}
+          type={
+            (props.media.type === "show" ? "tv" : "movie") as TMDBContentTypes
+          }
+          mediaId={props.media.id}
+          series={props.series}
+        />
+      ) : null}
+    </>
   );
 }

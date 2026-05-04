@@ -3,13 +3,13 @@ import { forwardRef } from "react";
 
 import { Icon, Icons } from "@/components/Icon";
 
-export interface VideoPlayerButtonProps {
-  children?: React.ReactNode;
-  onClick?: (el: HTMLButtonElement) => void;
+interface VideoPlayerButtonProps {
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   icon?: Icons;
   iconSizeClass?: string;
   className?: string;
   activeClass?: string;
+  children?: React.ReactNode;
 }
 
 export const VideoPlayerButton = forwardRef<
@@ -20,7 +20,7 @@ export const VideoPlayerButton = forwardRef<
     <button
       ref={ref}
       type="button"
-      onClick={(e) => props.onClick?.(e.currentTarget as HTMLButtonElement)}
+      onClick={props.onClick}
       className={classNames([
         "tabbable p-2 rounded-full hover:bg-video-buttonBackground hover:bg-opacity-50 transition-transform duration-100 flex items-center gap-3",
         props.activeClass ??

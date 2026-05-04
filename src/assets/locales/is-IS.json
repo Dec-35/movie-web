@@ -92,7 +92,8 @@
     "tagline": "Horfðu á uppáhalds þætti og myndirnar þínar með þessu opna hugbúnaða forriti."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "Um",
       "dmca": "DMCA",
@@ -138,15 +139,11 @@
       },
       "morning": {
         "default": "Hvað myndirðu vilja horfa á þessum morgni?",
-        "extra": [
-          "Ég heyrði að Before Sunrise sé góð"
-        ]
+        "extra": ["Ég heyrði að Before Sunrise sé góð"]
       },
       "night": {
         "default": "Hvað myndirðu vilja horfa á í nótt?",
-        "extra": [
-          "Þreytt? Ég heyrði að The Exorcist sé góð."
-        ]
+        "extra": ["Þreytt? Ég heyrði að The Exorcist sé góð."]
       }
     }
   },

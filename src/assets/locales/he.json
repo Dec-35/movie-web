@@ -90,7 +90,8 @@
     "tagline": "צפה בתוכניות ובסרטים האהובים עליך עם אפליקציית סטרימינג זו בקוד פתוח."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "אודות",
       "dmca": "זכויות יוצרים",

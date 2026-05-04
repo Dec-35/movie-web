@@ -90,7 +90,8 @@
     "tagline": "Watch yer favorite shows and movies with this open source streaming ship."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "About",
       "dmca": "DMCA",

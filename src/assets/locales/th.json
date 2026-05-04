@@ -90,7 +90,8 @@
     "tagline": "ดูรายการซีรี่ย์และภาพยนตร์ที่คุณชื่นชอบด้วยแอปสตรีมนี้"
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "เกี่ยวกับ",
       "dmca": "DMCA",

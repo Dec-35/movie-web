@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 import { NoUserAvatar, UserAvatar } from "@/components/Avatar";
 import { IconPatch } from "@/components/buttons/IconPatch";
-import { Icons } from "@/components/Icon";
-import { LinksDropdown } from "@/components/LinksDropdown";
+import { Icon, Icons } from "@/components/Icon";
+import { GoToLink, LinksDropdown } from "@/components/LinksDropdown";
 import { Lightbar } from "@/components/utils/Lightbar";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { BlurEllipsis } from "@/pages/layouts/SubPageLayout";
@@ -86,27 +86,24 @@ export function Navigation(props: NavigationProps) {
               >
                 <BrandPill clickable />
               </Link>
-              <a
-                href={conf().DISCORD_LINK}
-                target="_blank"
-                rel="noreferrer"
-                className="text-xl text-white tabbable rounded-full"
-              >
-                <IconPatch icon={Icons.DISCORD} clickable downsized />
-              </a>
-              <a
-                href={conf().GITHUB_LINK}
-                target="_blank"
-                rel="noreferrer"
-                className="text-xl text-white tabbable rounded-full"
-              >
-                <IconPatch icon={Icons.GITHUB} clickable downsized />
-              </a>
             </div>
-            <div className="relative pointer-events-auto">
-              <LinksDropdown>
-                {loggedIn ? <UserAvatar withName /> : <NoUserAvatar />}
-              </LinksDropdown>
+            <div className="flex items-center space-x-1.5 ssm:space-x-3 relative pointer-events-auto">
+              <div className="text-xl text-white tabbable rounded-full ml-1.5">
+                <Link
+                  to="/accountChoice"
+                  className="text-white tabbable rounded-full"
+                >
+                  <IconPatch icon={Icons.USER} clickable downsized />
+                </Link>
+              </div>
+              <div className="text-xl text-white tabbable rounded-full ml-1.5">
+                <Link
+                  to="/settings"
+                  className="text-white tabbable rounded-full"
+                >
+                  <IconPatch icon={Icons.SETTINGS} clickable downsized />
+                </Link>
+              </div>
             </div>
           </div>
         </div>

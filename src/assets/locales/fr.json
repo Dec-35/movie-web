@@ -92,7 +92,8 @@
     "tagline": "Regardez vos séries et films préférés avec cette application de streaming open source."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "À propos",
       "dmca": "DMCA",
@@ -104,11 +105,19 @@
     }
   },
   "home": {
+    "share": "Partager",
     "bookmarks": {
       "sectionTitle": "Favoris"
     },
     "continueWatching": {
       "sectionTitle": "Reprendre la lecture"
+    },
+    "watch": "Regarder",
+    "trending": {
+      "sectionTitle": "En ce moment"
+    },
+    "recommended": {
+      "sectionTitle": "Recommandé pour vous"
     },
     "mediaList": {
       "stopEditing": "Arrêter l'édition"
@@ -138,9 +147,7 @@
       },
       "morning": {
         "default": "Que voulez-vous regarder ce matin ?",
-        "extra": [
-          "Les films, c'est comme les voyages : ça nous ouvre l'esprit"
-        ]
+        "extra": ["Les films, c'est comme les voyages : ça nous ouvre l'esprit"]
       },
       "night": {
         "default": "Que voulez-vous regarder ce soir ?",
@@ -283,6 +290,9 @@
         "loadingList": "Chargement...",
         "loadingTitle": "Chargement...",
         "unairedEpisodes": "Un ou plusieurs épisodes de cette saison ont été désactivés, car ils n'ont pas encore été diffusés."
+      },
+      "seasons": {
+        "button": "Saisons"
       },
       "playback": {
         "speedLabel": "Vitesse de lecture",

@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
 import { PlayerMeta } from "@/stores/player/slices/source";
+import { accountManager } from "@/utils/account";
 
 export interface ProgressItem {
   watched: number;
@@ -74,16 +75,17 @@ export const useProgressStore = create(
       items: {},
       updateQueue: [],
       removeItem(id) {
-        set((s) => {
-          updateId += 1;
-          s.updateQueue.push({
-            id: updateId.toString(),
-            action: "delete",
-            tmdbId: id,
-          });
+        // set((s) => {
+        //   updateId += 1;
+        //   s.updateQueue.push({
+        //     id: updateId.toString(),
+        //     action: "delete",
+        //     tmdbId: id,
+        //   });
 
-          delete s.items[id];
-        });
+        //   delete s.items[id];
+        // });
+        accountManager.deleteProgress(id);
       },
       replaceItems(items: Record<string, ProgressMediaItem>) {
         set((s) => {

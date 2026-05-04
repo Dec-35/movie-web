@@ -92,7 +92,8 @@
     "tagline": "Watch your favourite shows and movies with this open source streaming app."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Home",
     "pages": {
       "about": "About",
       "dmca": "DMCA",
@@ -104,11 +105,19 @@
     }
   },
   "home": {
+    "share": "Share",
     "bookmarks": {
       "sectionTitle": "Bookmarks"
     },
     "continueWatching": {
       "sectionTitle": "Continue Watching"
+    },
+    "watch": "Watch",
+    "trending": {
+      "sectionTitle": "Trending"
+    },
+    "recommended": {
+      "sectionTitle": "For you"
     },
     "mediaList": {
       "stopEditing": "Stop editing"
@@ -279,6 +288,9 @@
         "loadingList": "Loading...",
         "loadingTitle": "Loading...",
         "unairedEpisodes": "One or more episodes in this season have been disabled because they haven't been aired yet."
+      },
+      "seasons": {
+        "button": "Seasons"
       },
       "playback": {
         "speedLabel": "Playback speed",

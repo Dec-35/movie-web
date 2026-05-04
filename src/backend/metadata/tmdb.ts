@@ -98,6 +98,8 @@ export function formatTMDBMetaToMediaItem(media: TMDBMediaResult): MediaItem {
     release_date: media.original_release_date,
     poster: media.poster,
     type,
+    overview: media.overview,
+    vote_average: media.vote_average,
   };
 }
 
@@ -200,6 +202,42 @@ export async function multiSearch(
   return results;
 }
 
+export async function getTrending(
+  period: string,
+): Promise<(TMDBMovieSearchResult | TMDBShowSearchResult)[]> {
+  const data = await get<TMDBSearchResult>(`trending/all/${period}`, {
+    language: "en-US",
+    page: 1,
+  });
+  // filter out results that aren't movies or shows
+  const results = data.results.filter(
+    (r) =>
+      r.media_type === TMDBContentTypes.MOVIE ||
+      r.media_type === TMDBContentTypes.TV,
+  );
+  return results;
+}
+
+export async function getRelated(
+  id: string,
+  type: MWMediaType,
+): Promise<(TMDBMovieSearchResult | TMDBShowSearchResult)[]> {
+  const data = await get<TMDBSearchResult>(
+    `${mediaTypeToTMDB(type)}/${id}/recommendations`,
+    {
+      language: "en-US",
+      page: 1,
+    },
+  );
+  // filter out results that aren't movies or shows
+  const results = data.results.filter(
+    (r) =>
+      r.media_type === TMDBContentTypes.MOVIE ||
+      r.media_type === TMDBContentTypes.TV,
+  );
+  return results;
+}
+
 export async function generateQuickSearchMediaUrl(
   query: string,
 ): Promise<string | undefined> {
@@ -280,16 +318,109 @@ export function formatTMDBSearchResult(
       id: show.id,
       original_release_date: new Date(show.first_air_date),
       object_type: mediatype,
+      overview: show.overview,
+      vote_average: show.vote_average,
     };
   }
 
   const movie = result as TMDBMovieSearchResult;
-
   return {
     title: movie.title,
     poster: getMediaPoster(movie.poster_path),
     id: movie.id,
     original_release_date: new Date(movie.release_date),
     object_type: mediatype,
+    overview: movie.overview,
+    vote_average: movie.vote_average,
   };
+}
+
+export async function getTrendingMediaItems(
+  period: string,
+): Promise<MediaItem[]> {
+  const data = await getTrending(period);
+  return data.map((result) =>
+    formatTMDBMetaToMediaItem(
+      formatTMDBSearchResult(result, result.media_type),
+    ),
+  );
+}
+
+export async function getRecommendations(
+  userMedia: MediaItem[],
+): Promise<MediaItem[]> {
+  // Shuffle the userMedia array to introduce randomness
+  const shuffledUserMedia = userMedia.sort(() => Math.random() - 0.5);
+
+  // Select a maximum of 10 unique items from the shuffled list
+  const uniqueItems = shuffledUserMedia.slice(0, 10);
+
+  // Fetch similar items for each selected unique item
+  const promises = uniqueItems.map((media) =>
+    getRelated(media.id, mediaItemTypeToMediaType(media.type)),
+  );
+
+  const results = await Promise.all(promises);
+
+  // Flatten the results into a single array
+  const allItems = results
+    .flat()
+    .map((result) =>
+      formatTMDBMetaToMediaItem(
+        formatTMDBSearchResult(result, result.media_type),
+      ),
+    );
+
+  // Count occurrences of each item
+  const itemCounts: { [key: string]: { item: MediaItem; count: number } } = {};
+
+  allItems.forEach((item) => {
+    const key = item.id; // Assuming MediaItem has an 'id' property
+    if (itemCounts[key]) {
+      itemCounts[key].count += 2;
+    } else {
+      itemCounts[key] = { item, count: 1 };
+    }
+  });
+
+  // Create a set of input item IDs for easy lookup
+  const inputItemIds = new Set(userMedia.map((item) => item.id));
+
+  // Create the final list with unique items and their scores, excluding input items
+  const finalList = Object.values(itemCounts)
+    .map(({ item, count }) => ({
+      ...item,
+      score: count,
+    }))
+    .filter((item) => !inputItemIds.has(item.id));
+
+  const randomItems = finalList.filter(() => Math.random() > 0.8);
+  randomItems.forEach((item) => {
+    item.score += 1;
+  });
+
+  // Sort by score in descending order and take the top items
+  const sortedFinalList = finalList
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 40);
+
+  return sortedFinalList;
+}
+
+export async function getMediaTrailer(
+  id: string,
+  type: "movie" | "show",
+): Promise<string | undefined> {
+  const data = await get<any | TMDBShowData>(
+    `${type === "show" ? "tv" : "movie"}/${id}/videos`,
+  );
+  const trailer = data.results.find(
+    (v: { type: string }) => v.type === "Trailer",
+  );
+  return trailer?.key;
+}
+
+export async function getMediaRatings(id: string, type: "show"): Promise<any> {
+  const data = await get<any | TMDBShowData>(`tv/${id}/content_ratings`);
+  return data.results;
 }

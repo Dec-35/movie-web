@@ -11,6 +11,10 @@ import { HeroPart } from "@/pages/parts/home/HeroPart";
 import { WatchingPart } from "@/pages/parts/home/WatchingPart";
 import { SearchListPart } from "@/pages/parts/search/SearchListPart";
 import { SearchLoadingPart } from "@/pages/parts/search/SearchLoadingPart";
+import { useAuthStore } from "@/stores/auth";
+
+import { RecommendedPart } from "./parts/home/RecommendedPart";
+import { TrendingPart } from "./parts/home/TrendingPart";
 
 function useSearch(search: string) {
   const [searching, setSearching] = useState<boolean>(false);
@@ -38,6 +42,15 @@ export function HomePage() {
   const [search] = searchParams;
   const s = useSearch(search);
 
+  const proxySet = useAuthStore((state) => state.proxySet);
+  useEffect(() => {
+    if (!proxySet) {
+      useAuthStore
+        .getState()
+        .setProxySet(["https://monumental-halva-f416f2.netlify.app/"]);
+    }
+  }, [proxySet]);
+
   return (
     <HomeLayout showBg={showBg}>
       <div className="mb-16 sm:mb-24">
@@ -46,15 +59,17 @@ export function HomePage() {
         </Helmet>
         <HeroPart searchParams={searchParams} setIsSticky={setShowBg} />
       </div>
-      <WideContainer>
+      <WideContainer ultraWide>
         {s.loading ? (
           <SearchLoadingPart />
         ) : s.searching ? (
           <SearchListPart searchQuery={search} />
         ) : (
           <>
-            <BookmarksPart />
             <WatchingPart />
+            <BookmarksPart />
+            <RecommendedPart />
+            <TrendingPart />
           </>
         )}
       </WideContainer>

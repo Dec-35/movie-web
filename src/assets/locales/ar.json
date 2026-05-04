@@ -90,7 +90,8 @@
     "tagline": "شاهد عروضك وأفلامك المفضلة باستخدام تطبيق البث مفتوح المصدر هذا."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "حَول",
       "dmca": "DMCA",

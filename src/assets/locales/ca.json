@@ -92,7 +92,8 @@
     "tagline": "Mireu els vostres programes i pel·lícules preferits amb aquesta aplicació de codi obert de reproducció en temps real."
   },
   "global": {
-    "name": "movie-web",
+    "name": "dec-movies",
+    "home": "Accueil",
     "pages": {
       "about": "Quant a",
       "dmca": "DMCA",
@@ -138,15 +139,11 @@
       },
       "morning": {
         "default": "Què us agradaria mirar aquest matí?",
-        "extra": [
-          "He sentit que «Abans de l'alba» és bona"
-        ]
+        "extra": ["He sentit que «Abans de l'alba» és bona"]
       },
       "night": {
         "default": "Què us agradaria mirar aquesta nit?",
-        "extra": [
-          "Esteu cansat? He sentit que «L'exorcista» és bona."
-        ]
+        "extra": ["Esteu cansat? He sentit que «L'exorcista» és bona."]
       }
     }
   },
